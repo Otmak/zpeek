@@ -6,6 +6,7 @@ import requests
 application = Flask(__name__)
 passwd = 'happy.tday.2020'
 
+
 def toInt(s):
 	if type(s) == str:
 		return int(s)
@@ -14,30 +15,42 @@ def toInt(s):
 
 @application.route('/')
 def index():
-	return render_template('index.html')
+	return 'online'
 
 
-@application.route('/assets')
+@application.route('/assets', methods=['GET'])
 def get_assets():
 	url = f'https://omi.zonarsystems.net/interface.php?customer=hol1348&username=zonar&password={passwd}&action=showopen&operation=showassets&format=xml'
 	res = requests.get(url)
 	myArray = []
+	bigData = {}
 	getData = ET.fromstring(res.content)
-	# print(len(getData))
-	# print(getData.findall('asset'))
 	data = getData.findall('asset')
+
+	# for i in data:
+	# 	myObj = {
+	# 		'id': int(i.get('id')),
+	# 		'gpsid': toInt(i.find('gps').text),
+	# 		'assetNumber': i.find('fleet').text,
+	# 		'status': i.find('status').text,
+	# 		'type': i.find('type').text
+	# 	}
+	# 	myArray.append(myObj)
+
 	for i in data:
-		# print(i.find('gps').text)
-		myObj = {
+		h = int(i.get('id'))
+		# print(h)
+		bigData[h] = {
 			'id': int(i.get('id')),
 			'gpsid': toInt(i.find('gps').text),
-			'number': i.find('fleet').text,
+			'assetNumber': i.find('fleet').text,
 			'status': i.find('status').text,
 			'type': i.find('type').text
 		}
-		myArray.append(myObj)
-	# print(myArray)
-	return jsonify(myArray)
+	print('*'*1000, bigData)
+
+
+	return bigData
 
 
 @application.route('/gendata')
@@ -47,8 +60,8 @@ def gendata():
 	getData = ET.fromstring(res.content)
 	myArray = []
 	data = getData.findall('gendata')
-	# print(data)
 	ourCache = {}
+
 	for  i in data:
 		if i.get('assetid') in ourCache:
 			print('WE GOT IT')
@@ -56,12 +69,9 @@ def gendata():
 		else:
 			print('NOT IN YET')
 			ourCache[i.get('assetid')] = i.get('assetid')
-		# print(i.get('assetid'))
 			myArray.append(i.get('assetid'))
-		# print(myArray)
 
 	return jsonify(myArray)
-
 
 
 if __name__ == '__main__':

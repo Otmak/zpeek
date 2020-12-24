@@ -33,9 +33,14 @@ const useStyles = makeStyles((theme) => ({
 export default function VerticalTabs(props) {
   // console.log(props)
   // console.log(id)
+  // {props.assets.map(i => <Tab label="Item One" {...a11yProps(i.id)} />) }
+    // {Object.entries(props.assets).map(([k, v]) => <Tab  label="Item One" {...a11yProps(v.id)} />) }
+  // Object.entries(props.assets).map(([k, v]) => console.log(v.id,'==', v.index) )
+
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-console.log(React.useState(0))
+  const [value, setValue] = React.useState(1);
+  const data = props.assets
+console.log(React.useState(1), 'LOGGING>>> ', value)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -50,36 +55,9 @@ console.log(React.useState(0))
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-        <Tab label="Item One" {...a11yProps(0)} />
-
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        {Object.entries(data).map(([k, v]) => <Tab key={k} label={v.assetNumber} value={v.id}/>) }
       </Tabs>
-      <TabPanel value={value} index={1}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
+      {Object.entries(data).map(([k, v]) => <TabPanel key={k} value={value} index={v.index}> otuma</TabPanel> ) }
     </div>
   );
 }

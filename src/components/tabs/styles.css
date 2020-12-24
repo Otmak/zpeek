@@ -1,0 +1,9 @@
+  .root {
+    flex-grow: 1;
+    background-color: red;
+    display: 'flex';
+    height: 224;
+  }
+  .tabs {
+    border-right: `1px solid #fff`;
+  }

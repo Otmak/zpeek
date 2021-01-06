@@ -69,10 +69,11 @@ def gendata():
                 count = 0
                 ourCache = {}
                 bigData = {}
+                listcount = 1
 
 
                 for i in gendataXML:
-                    print(bigData)
+                    # print(bigData)
                     count += 1
                     key = i.get('ctimestamp')
 
@@ -83,16 +84,22 @@ def gendata():
                             'ltime': i.get('ltimestamp'),
                             'data': i.text
                         }
+                        listcount += 1
+                        ourCache[key] = listcount
+
                         existingValue = bigData.get(key)['events']
 
                         if type(existingValue) is list:
                             allEventsList = []
                             print('******ITS A LIST*****')
+                            print(f'LENTH OF LIST: {len(existingValue)}')
                             print('BEGIN :******', existingValue)
                             for eachEvent in existingValue:
-                                print('EACH*****', eachEvent)
-                                bigData.get(key)['events'] = allEventsList
+                                allEventsList.append(eachEvent)
                             allEventsList.append(currentValue)
+                            bigData.get(key)['events'] = allEventsList
+                            print(f'LENTH OF LIST: {len(allEventsList)}')
+                            print('AFTER: ****** ', bigData.get(key)['events'], '      '*110)
                         else:
                             events = [existingValue, currentValue]
                             bigData.get(key)['events'] = events
@@ -110,7 +117,7 @@ def gendata():
                                 'data': i.text
                             }
                         }
-                    ourCache[i.get('ctimestamp')] = i
+                    ourCache[i.get('ctimestamp')] = listcount
 
                 myArray.append(bigData)
                 print('FUNCTION IS DONE!', count, len(myArray))

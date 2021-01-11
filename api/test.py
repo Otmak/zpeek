@@ -1,10 +1,10 @@
 from flask import Flask, render_template, jsonify, send_file, url_for, redirect
 import xml.etree.ElementTree as ET
 import requests
-
+# https://omi.zonarsystems.net/interface.php?customer=hol3292&username=zonar&password=PartyLikeIts.1999&action=showposition&operation=path&reqtype=dbid&target=194&version=2&starttime=1603971032&endtime=1608230858&logvers=3.8&format=json
 application = Flask(__name__)
-passwd = 'workhorse-21'
-password = 'workhorse-21'
+passwd = 'PartyLikeIts.1999'
+password = 'PartyLikeIts.1999'
 
 
 def toInt(s):
@@ -23,6 +23,11 @@ def get_assets():
     try:
         url = f'https://omi.zonarsystems.net/interface.php?customer=hol1348&username=zonar&password={passwd}&action=showopen&operation=showassets&format=xml'
         res = requests.get(url)
+        if res.status_code == 200:
+            print('AUTH SUCSESS')
+        else:
+            print('******ATTENTION*******  AUTH FAILED')
+            print(f'ERROR : {str(res.content.decode("utf-8"))}')
         myArray = []
         bigData = {}
         getData = ET.fromstring(res.content)
@@ -133,7 +138,9 @@ def gendata():
 def test():
     try:
         if True:
-            return "Test is working"
+            return 'Test is working'
+    except:
+        return 'somn wrong bruh :|'
 
 
 if __name__ == '__main__':

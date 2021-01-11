@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-// import SignInSide from './components/signin/signin';
-// import VerticalTabs from './components/tabs/VerticalTabs';
-import Basic from './components/tabs/tab';
+import ElevateAppBar from './components/app-container/app-container';
 import './App.css';
 
 class App extends Component {
@@ -14,18 +12,17 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('/gendata')
+    fetch('/assets')
     .then(res=> res.json() )
     .then(data => this.setState({ assets: data }) )
-    // console.log(monsters)
   }
   render() {
-    // console.log(this.state)
+    // console.log('LOGGING STATE:',this.state)
     return (
-            <div className='App'>
-                   <Basic assets={this.state.assets} />
-            </div>
-            )
+      <div className='App'>
+        <ElevateAppBar assets={this.state.assets} />
+      </div>
+    )
   }
 }
 

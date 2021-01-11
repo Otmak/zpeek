@@ -1,0 +1,37 @@
+Tabs{
+	width: 100wh;
+}
+.tabItem-container {
+    width: 300px;
+    list-style: none;
+    border: 1px solid #bdbdbd59;
+    height: 91vh;
+    overflow: auto;
+    float: left;
+}
+.tabItem:hover{
+	background-color: #bdbdbd59;
+}
+ul .tabItem {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+div .active-assetList-avatar{
+    color: #59D771;
+    background-color: transparent;
+    box-shadow: 0 0 0 0.3px #59D771;
+    /*bdbdbd*/
+
+}
+div .inactive-assetList-avatar{
+    color: #E21189;
+    background-color: transparent;
+    box-shadow: 0 0 0 0.3px #E21189;
+
+}
+.search-textfield {
+    width: 100%;
+}
+/*.tab-panel{
+	float: right;
+}*/

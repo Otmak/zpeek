@@ -1,63 +1,103 @@
-import React from 'react';
-// import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import TabPanel from './tabpanel'
+import React, {Component} from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import './tabs.css'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
+import TabSkeleton from '../skeletons/tabSkeleton';
+import TextField from '@material-ui/core/TextField';
+import AssetContainer from '../asset-content/asset-container';
 
-// TabPanel.propTypes = {
-//   children: PropTypes.node,
-//   index: PropTypes.any.isRequired,
-//   value: PropTypes.any.isRequired,
-// };
+class TabComponent extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      assetList : this.props,
+      searchFeild : '',
+      loading : true,
+      active : false
+    }
+  }
+  // isLoading(arr, l){
+  //   }
 
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
-  };
+  componentDidMount(){
+    this.setState({loading : false})
+
+  }
+
+  filterAssetList = (e) => {
+    return this.setState({ searchFeild: e.target.value})
+
+  }
+
+  parseNTimes(n, elem) {
+    const elemArr = []
+    for ( let i = 0; i < n; i++) {
+      elemArr.push(elem)
+      }
+      return elemArr
+  }
+
+  // activeOnlyList(){
+  //   if (this.state.active)
+  // }
+
+  render(){
+    const { searchFeild, loading } = this.state;
+    const assetList = this.props.data
+    const activeAssetsList = assetList.filter( asset=> asset.status == '1')
+    const lowercaseSearchFilter = searchFeild.toLowerCase();
+    const filteredData = assetList.filter(item => {
+      return Object.keys(item).some(key =>
+        item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
+      );
+    })
+
+    return (
+      <div>
+        <Tabs>
+          <TabList className='tabItem-container'>
+          <TextField onChange={ this.filterAssetList } className='search-textfield' id="filled-search" label="Search" type="search" variant="filled" />
+          {assetList.length <1 && this.parseNTimes(1,<TabSkeleton/>)}
+         
+            { 
+              filteredData.map( i=> 
+                <Tab key={i.key}>
+                  <List className='tabItem'>
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar className={ i.status == '1' ? 'active-assetList-avatar' : 'inactive-assetList-avatar'}>
+                          {i.status == '1'? 'a' : 'i'}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={i.assetNumber} secondary={i.type} />
+                    </ListItem>
+                  <Divider component="li" />
+                  </List>
+                </Tab>  
+            )}
+
+          </TabList>
+            { 
+              filteredData.map( i=> 
+                <TabPanel key={i.key} className='tab-panel'>
+                  <AssetContainer  assetData={{'asset': i.assetNumber, 'id': i.key, 'status': i.status, 'gpsid': i.gpsid}
+                  }/>
+                </TabPanel> )
+            }
+        </Tabs>
+      </div>
+    )
+
+  }
+
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    // height: 700,
-  },
-  tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
-  },
-}));
+export default TabComponent;
 
-export default function VerticalTabs(props) {
-  // console.log(props)
-  // console.log(id)
-  // {props.assets.map(i => <Tab label="Item One" {...a11yProps(i.id)} />) }
-    // {Object.entries(props.assets).map(([k, v]) => <Tab  label="Item One" {...a11yProps(v.id)} />) }
-  // Object.entries(props.assets).map(([k, v]) => console.log(v.id,'==', v.index) )
 
-  const classes = useStyles();
-  const [value, setValue] = React.useState(1);
-  const data = props.assets
-console.log(React.useState(1), 'LOGGING>>> ', value)
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
-  return (
-    <div className={classes.root}>
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        className={classes.tabs}
-      >
-        {Object.entries(data).map(([k, v]) => <Tab key={k} label={v.assetNumber} value={v.id}/>) }
-      </Tabs>
-      {Object.entries(data).map(([k, v]) => <TabPanel key={k} value={value} index={v.index}> otuma</TabPanel> ) }
-    </div>
-  );
-}

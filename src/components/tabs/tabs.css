@@ -8,7 +8,11 @@ Tabs{
     height: 91vh;
     overflow: auto;
     float: left;
+
 }
+/*div .tabs-container {
+    
+}*/
 .tabItem:hover{
 	background-color: #bdbdbd59;
 }
@@ -31,6 +35,7 @@ div .inactive-assetList-avatar{
 }
 .search-textfield {
     width: 100%;
+    position: fixed;
 }
 /*.tab-panel{
 	float: right;

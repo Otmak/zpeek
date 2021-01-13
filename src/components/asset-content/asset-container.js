@@ -13,10 +13,11 @@ class AssetContainer extends Component {
 	}
 
 	render(){
-		console.log(this)
+		// console.log(this)
+		const {gpsid, id} = this.state.data.assetData
 		return(
-			<div>
-				 hello from the other sides
+			<div className='path-container'>
+				 <Path data={id}/>
 			</div>
 			)
 	}

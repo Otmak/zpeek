@@ -77,6 +77,7 @@ export default function ElevateAppBar(props) {
         </AppBar>
       </ElevationScroll>
       <Toolbar />
+      <Toolbar />
       <Container>
         <TabComponent data={props.assets}> </TabComponent>
       </Container>

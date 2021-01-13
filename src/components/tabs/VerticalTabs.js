@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './tabs.css'
 import List from '@material-ui/core/List';
+import Toolbar from '@material-ui/core/Toolbar';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -34,10 +35,10 @@ class TabComponent extends Component {
 
   }
 
-  parseNTimes(n, elem) {
+  parseNTimes(n) {
     const elemArr = []
     for ( let i = 0; i < n; i++) {
-      elemArr.push(elem)
+      elemArr.push(<TabSkeleton key={i} />)
       }
       return elemArr
   }
@@ -58,12 +59,13 @@ class TabComponent extends Component {
     })
 
     return (
-      <div>
+      <div className='tabs-container'>
+
         <Tabs>
           <TabList className='tabItem-container'>
-          <TextField onChange={ this.filterAssetList } className='search-textfield' id="filled-search" label="Search" type="search" variant="filled" />
-          {assetList.length <1 && this.parseNTimes(1,<TabSkeleton/>)}
-         
+
+            <TextField onChange={ this.filterAssetList } className='search-textfield' id="filled-search" label="Search" type="search" variant="filled" />
+            {assetList.length <1 && this.parseNTimes(10)}
             { 
               filteredData.map( i=> 
                 <Tab key={i.key}>

@@ -2,25 +2,37 @@ import React, { Component } from 'react';
 import ElevateAppBar from './components/app-container/app-container';
 import './App.css';
 
+
 class App extends Component {
     constructor(){
     super()
     this.state = {
       assets: [],
-      searchFeild: ''
+      searchFeild: '',
+      viewBothActiveAndInactive : false
      }
   }
 
   componentDidMount() {
     fetch('/assets')
     .then(res=> res.json() )
-    .then(data => this.setState({ assets: data }) )
+    .then(data => this.setState({ assets: data }))
+
   }
+
+  bothActiveAndInactive(){
+    //function to change view from active only to BothActive and inactive
+  }
+
+  
   render() {
-    // console.log('LOGGING STATE:',this.state)
+    const {assets} = this.state
+    const assetListLenghth = assets.length
+    const activeAssetsList = assets.filter( asset=> asset.status == '1')
+    // console.log(assetListLenghth)
     return (
       <div className='App'>
-        <ElevateAppBar assets={this.state.assets} />
+        <ElevateAppBar assets={activeAssetsList} />
       </div>
     )
   }

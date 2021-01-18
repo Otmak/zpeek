@@ -5,6 +5,7 @@ import requests
 application = Flask(__name__)
 passwd = 'PartyLikeIts.1999'
 password = 'PartyLikeIts.1999'
+account = 'zhd0001'
 
 def makeAPIRequest():
     ''' User in any route to make api call detect errors with API call and maybe send email about error'''
@@ -13,7 +14,8 @@ def makeAPIRequest():
 def toInt(s):
     if type(s) == str:
         return int(s)
-    return False
+    else:
+        return s
 
 
 @application.route('/')
@@ -24,7 +26,7 @@ def index():
 @application.route('/assets', methods=['GET'])
 def get_assets():
     try:
-        url = f'https://omi.zonarsystems.net/interface.php?customer=hol1348&username=zonar&password={passwd}&action=showopen&operation=showassets&format=xml'
+        url = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={passwd}&action=showopen&operation=showassets&format=xml'
         res = requests.get(url)
         if res.status_code == 200:
             print('AUTH SUCSESS')
@@ -38,18 +40,27 @@ def get_assets():
 
 
         for i in data:
+            print( i.find('gps').text )
             myObj = {
                 'menuItem': i.find('fleet').text,
                 'key': int(i.get('id')),
-                'gpsid': toInt(i.find('gps').text),
+                'gpsid': i.find('gps').text,
                 'assetNumber': i.find('fleet').text,
                 'status': i.find('status').text,
                 'type': i.find('type').text
             }
             myArray.append(myObj)
     except:
-        print('There is an Error')
+        print('There is an Error in main')
     return jsonify(myArray)
+
+
+@application.route('/mani')
+def main():
+    try:
+        print('online!')
+    except:
+        print('Error occured in MAIN.')
 
 
 @application.route('/path', methods=['GET', 'POST'])
@@ -70,7 +81,7 @@ def path():
             dbId = dataFromClient['dbId']
             print('PARAMS READY!....===> sending ', start,end,dbId,passwd)
 
-            pathUrl = f'https://omi.zonarsystems.net/interface.php?customer=hol3292&username=zonar&password={passwd}&action=showposition&operation=path&reqtype=dbid&target={int(dbId)}&version=2&starttime={int(start)}&endtime={int(end)}&logvers=3.8&format=json'
+            pathUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={passwd}&action=showposition&operation=path&reqtype=dbid&target={int(dbId)}&version=2&starttime={int(start)}&endtime={int(end)}&logvers=3.8&format=json'
             # print('BODY:', star)
             print('MAKING request!....')
             res = requests.get(pathUrl)
@@ -90,6 +101,7 @@ def path():
                 else:
                     path_data = path_req_data.get('pathevents')
                     if path_data.get('assets') == None:
+                        print(path_req_data)
                         print('FOUND PATH BUT ITS NONE')
                         return {'error' : 'This Asset has no data'}
                     else:
@@ -105,7 +117,7 @@ def path():
         print('ERROR')
         return {'error ': 'An Error in path happened'}
 
-@application.route('/gendata', methods=['GET'])
+@application.route('/gendata', methods=['GET', 'POST'])
 def gendata():
     try:
         url = f'https://hol3292.zonarsystems.net/interface.php?format=xml&username=zonar&password={password}&action=showopen&operation=gendata&start=1603958400&tstype=load&reqtype=dbid&target=194'
@@ -119,8 +131,6 @@ def gendata():
         getData = ET.fromstring(res.content)
         myArray = []
         data = getData.findall('gendata')
-        ourCache = {}
-        bigData = {}
         '''get all items
         '''
 
@@ -151,9 +161,9 @@ def gendata():
 
                         if type(existingValue) is list:
                             allEventsList = []
-                            print('******ITS A LIST*****')
-                            print(f'LENTH OF LIST: {len(existingValue)}')
-                            print('BEGIN :******', existingValue)
+                            # print('******ITS A LIST*****')
+                            # print(f'LENTH OF LIST: {len(existingValue)}')
+                            # print('BEGIN :******', existingValue)
                             for eachEvent in existingValue:
                                 allEventsList.append(eachEvent)
                             allEventsList.append(currentValue)
@@ -181,13 +191,13 @@ def gendata():
 
                 myArray.append(bigData)
                 print('FUNCTION IS DONE!', count, len(myArray))
-                return myArray
+                return {'gendata': myArray}
             except:
                 print('somn went wrong bruh, looks like its inside PXMLJ')
-
         return jsonify(parseReqtoJson(data))
     except :
-        print('somn Error in /gendata')
+        print('somn Error in /gendata main.')
+        return {'error' : 'An Error occurred in GendataMain'}
 
 
 @application.route('/test')

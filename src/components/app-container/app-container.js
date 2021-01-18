@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import TabAndPanel from '../tabs/tab';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import TabComponent from '../tabs/VerticalTabs';
+import TabComponent from '../tabs/tab';
 
 function ElevationScroll(props) {
   const { children, window } = props;

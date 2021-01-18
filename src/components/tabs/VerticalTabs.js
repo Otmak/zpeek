@@ -12,6 +12,8 @@ import TabSkeleton from '../skeletons/tabSkeleton';
 import TextField from '@material-ui/core/TextField';
 import AssetContainer from '../asset-content/asset-container';
 
+// think aabout re-designing this to fit, added functionlly ty
+
 class TabComponent extends Component {
   constructor(props){
     super(props)
@@ -49,18 +51,24 @@ class TabComponent extends Component {
 
   render(){
     const { searchFeild, loading } = this.state;
+    // console.log(this)
     const assetList = this.props.data
     const activeAssetsList = assetList.filter( asset=> asset.status == '1')
     const lowercaseSearchFilter = searchFeild.toLowerCase();
-    const filteredData = assetList.filter(item => {
-      return Object.keys(item).some(key =>
-        item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
-      );
+    const filterGpsId = assetList.filter(item=> {
+      return item['gpsid'] === null ? '' : item['gpsid'].includes(lowercaseSearchFilter)
     })
+    const filterAssetNumber = assetList.filter(item => {
+      return item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
+    })
+
+    const filteredData = assetList.filter(item => {
+      return item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
+    })// add filter for searching GPSID
+
 
     return (
       <div className='tabs-container'>
-
         <Tabs>
           <TabList className='tabItem-container'>
 
@@ -82,7 +90,6 @@ class TabComponent extends Component {
                   </List>
                 </Tab>  
             )}
-
           </TabList>
             { 
               filteredData.map( i=> 
@@ -94,9 +101,7 @@ class TabComponent extends Component {
         </Tabs>
       </div>
     )
-
   }
-
 }
 
 export default TabComponent;

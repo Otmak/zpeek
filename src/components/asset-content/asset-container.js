@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Path from './path';
-import gendata from './gendata';
+import Gendata from './gendata/gendata';
 
 
 class AssetContainer extends Component {
@@ -18,7 +18,7 @@ class AssetContainer extends Component {
 		return(
 			<div className='path-container'>
 				 <Path data={id}/>
-			</div>
+							</div>
 			)
 	}
 }

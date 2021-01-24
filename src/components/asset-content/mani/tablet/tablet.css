@@ -1,0 +1,10 @@
+div .tablet-div-container{
+
+}
+.tablet-grid {
+	margin: 0.6em;
+}
+
+.tablet-grid:hover {
+	background-color: red;
+}

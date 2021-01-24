@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AppContainer from './components/app-container/app-container';
 import ElevateAppBar from './components/app-container/app-container';
 import './App.css';
 
@@ -32,7 +33,7 @@ class App extends Component {
     // console.log(assetListLenghth)
     return (
       <div className='App'>
-        <ElevateAppBar assets={activeAssetsList} />
+        <AppContainer assets={activeAssetsList} />
       </div>
     )
   }

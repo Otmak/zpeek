@@ -1,0 +1,9 @@
+.gps-grid-container{
+	padding: 0.1em;
+	margin: 0.3em;
+	margin-right: 0.6em;
+}
+
+.gps-grid-container:hover {
+	background-color: red;
+}

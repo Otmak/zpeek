@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import './asset-content-container.css'
 import Path from './path';
 import Gendata from './gendata/gendata';
+import Mani from './mani/mani';// Header-for asset info
 
 
-class AssetContainer extends Component {
+export default class AssetContainer extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
@@ -16,12 +18,19 @@ class AssetContainer extends Component {
 		// console.log(this)
 		const {gpsid, id} = this.state.data.assetData
 		return(
-			<div className='path-container'>
-				 <Path data={id}/>
-							</div>
-			)
+			<div className='asset-content-container'>
+				<div className='asset-details'>
+					<Mani data={{'id':id, 'gps':gpsid}}/>
+				</div>
+				<div className='big-boys-container'>
+					<div className='gendata-container'>
+						<Gendata data={id}/>
+					</div>
+					<div className='path-container'>
+						<Path data={id}/>
+					</div>
+				</div>
+			</div>
+		)
 	}
 }
-
-
-export default AssetContainer

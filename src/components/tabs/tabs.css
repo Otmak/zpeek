@@ -1,8 +1,10 @@
-Tabs{
-	width: 100wh;
+div .tabs-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
 }
 .tabItem-container {
-    width: 300px;
+    width: 20vw;
     list-style: none;
     border: 1px solid #bdbdbd59;
     height: 91vh;
@@ -10,11 +12,32 @@ Tabs{
     float: left;
 
 }
-/*div .tabs-container {
+/*  .appBar: {
+    top: 'auto';
+    bottom: 0;
+  }*/
+  .grow: {
+    flex-grow: 1;
+  }
+/*  .fabButton: {
+    position: 'absolute';
+    z-index: 1;
+    top: -30;
+    left: 0;
+    right: 0;
+    margin: '0 auto';
+  }*/
+/*.tabs-container {
+    display: flex;
+    flex-direction: column;
     
 }*/
 .tabItem:hover{
 	background-color: #bdbdbd59;
+    cursor: pointer;
+}
+.react-tabs__tab--selected {
+    background-color: #bdbdbd59;
 }
 ul .tabItem {
     padding-top: 0;
@@ -37,6 +60,9 @@ div .inactive-assetList-avatar{
     width: 100%;
     position: fixed;
 }
-/*.tab-panel{
-	float: right;
-}*/
+.tab-panel{
+	display: none;
+}
+.react-tabs__tab-panel--selected{
+    display: block;
+}

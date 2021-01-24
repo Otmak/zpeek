@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
+import Fab from '@material-ui/core/Fab';
+import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
+import SearchIcon from '@material-ui/icons/Search';
+import MoreIcon from '@material-ui/icons/MoreVert';
 import './tabs.css'
 import List from '@material-ui/core/List';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,6 +20,7 @@ import TextField from '@material-ui/core/TextField';
 import AssetContainer from '../asset-content/asset-container';
 
 // think aabout re-designing this to fit, added functionlly ty
+//This is a dev file VerticalTabs prod
 
 class TabComponent extends Component {
   constructor(props){
@@ -72,12 +80,8 @@ class TabComponent extends Component {
     const lowercaseSearchFilter = searchFeild.toLowerCase()
 
 
-    const filterGpsId = assetList.filter( async (item)=> {
-      // console.log('Logging..', await item['gpsid'] === null ? '' : item['gpsid'].includes(lowercaseSearchFilter) || await item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter))
-      let gps = await item['gpsid'] === null ? '' : item['gpsid'].includes(lowercaseSearchFilter) 
-      let assNum = await item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
-      // console.log(gps||assNum ? item : '')
-      return gps||assNum ? item : ''
+    const filterAssetOrGpsId = assetList.filter((item)=> {
+      return item['assetgpsid'].toLowerCase().includes(lowercaseSearchFilter)
     })
 
       // console.log('Log filterGpsAsset:',filterGpsId)
@@ -105,14 +109,14 @@ class TabComponent extends Component {
     // }
 
     return (
-      <div className='tabs-container'>
-        <Tabs>
-          <TabList className='tabItem-container'>
+      <div className='tabs-container-main-div'>
+        <Tabs className='tabs-container'>
 
-            <TextField onChange={ this.filterAssetList } className='search-textfield' id="filled-search" label="Search" type="search" variant="filled" />
+          <TabList className='tabItem-container'>
+          <TextField position ='fixed' onChange={ this.filterAssetList } className='search-textfield' id="filled-search" label="Search" type="search" variant="filled" />
             {assetList.length <1 && this.parseNTimes(10)}
             { 
-              filteredData.map( i=> 
+              filterAssetOrGpsId.map( i=> 
                 <Tab key={i.key}>
                   <List className='tabItem'>
                     <ListItem>
@@ -128,8 +132,9 @@ class TabComponent extends Component {
                 </Tab>  
             )}
           </TabList>
+          
             { 
-              filteredData.map( i=> 
+              filterAssetOrGpsId.map( i=> 
                 <TabPanel key={i.key} className='tab-panel'>
                   <AssetContainer  assetData={{'asset': i.assetNumber, 'id': i.key, 'status': i.status, 'gpsid': i.gpsid}
                   }/>

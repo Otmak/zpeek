@@ -11,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-
+//add tooltip to help explain some functions
 class Path extends Component {
 	constructor(props){
 		super(props)
@@ -164,7 +164,7 @@ class Path extends Component {
 					 />
 					      <Button onClick={()=> this.fetchPathData()} variant="outlined" color="primary" href="#outlined-buttons"> Get Path </Button>
 				</div>
-				   { data &&
+				   { 
 				   		<TableContainer component={Paper}>
    	   				      <Table className="classes.table" aria-label="simple table">
    	   				        <TableHead>

@@ -1,0 +1,13 @@
+.asset-content-container {
+	width: 79vw;
+	background-color: red;	
+}
+
+.mani-container{
+}
+
+.big-boys-container  { 
+	display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+}

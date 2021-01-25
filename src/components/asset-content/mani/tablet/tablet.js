@@ -16,12 +16,19 @@ export default class Tablet extends Component {
     this.state = {
       data : this.props.data,
       tabletMani : [],
-      gettingMani : true
+      gettingMani : true,
+      isComponentMounted : false
     }
   }
 
   componentDidMount(){
   	this.fetchManiData()
+  	this.setState({isComponentMounted : true})
+  	
+  }
+
+    componentWillUnmount(){
+  	this.setState({isComponentMounted : false})
   }
 
 
@@ -35,12 +42,14 @@ export default class Tablet extends Component {
 	console.log('fetching MANI')
 	// const { assetInfo : { id=null, gps=null }} = this.state
 	this.setState({tabletMani : []})
-	const { data : { id=null, gpsid=null }} = this.state
+	console.log(this)
+	const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
 
 
 	if (gpsid === null){
-		console.log('This asset has no GPSID')
+		console.log(` Tablet :- Either Component unmounted or gps null unmouted==>${isComponentMounted} gps==> ${gpsid}`)
 		this.setState({gettingMani: false})
+		return;
 	}else{
 		let bodyData = {
 		'params': {
@@ -88,7 +97,10 @@ export default class Tablet extends Component {
 
   			console.log('Getting MANI?', gettingMani)
   			return (
+  					<div>
   					<Typography align='center'>No Manifest Data </Typography>
+  					<Button align='right' onClick={()=> this.fetchManiData()} color="primary">Get Mani</Button>
+  					</div>
   				)
   		}else{
 

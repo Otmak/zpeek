@@ -14,21 +14,28 @@ export default class GPS extends Component {
     this.state = {
       data : this.props.data,
       gpsData : [],
-      gpsLoading : true
+      gpsLoading : true,
+      isComponentMounted : false
     }
   }
 
   componentDidMount(){
+  	this.setState({isComponentMounted : true})
   	this.fetchManiData()
+  }
+
+  componentWillUnmount(){
+  	this.setState({isComponentMounted : false})
   }
 
   async fetchManiData() {
 	console.log('fetching MANI')
-	const { data : { id=null, gpsid=null }} = this.state
+	const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
 
-	if (gpsid === null){
-		console.log('This asset has no GPSID')
-		this.setState({gpsLoading: false})
+	if ( gpsid === null ){
+		console.log(`GPS :- Either Component unmounted or gps null unmouted==>${isComponentMounted} gps==> ${gpsid}` )
+		// this.setState({gpsLoading: false})
+		return;
 	}else{
 		let bodyData = {
 		'params': {

@@ -95,22 +95,38 @@ def location():
         print('online')
         if request.method == 'POST':
             dataFromClient = request.get_json()['params']
-            gpsid = dataFromClient['gpsid']
-            print('making request', gpsid)
-            print('post it w ma ====>',)
-            dbid = 191
-            print(dbid)
+            dbid = dataFromClient['id']
+            print('making request', dbid)
+            print('post it w ma ====>',dbid)
+            # dbid = 191
+            # print(dbid)
             locationUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={password}&action=showposition&operation=current&format=xml&version=2&logvers=3&customer={account}&target={dbid}&reqtype=dbid'
             print('lo')
             req = requests.get(locationUrl)
 
             if req.status_code == 200:
                 print('Looking good....',req.status_code)
-                rooT = ET.fromstring(req.content)
-                # data = rooT.findall('asset')
+                # rooT = ET.fromstring(req.content)
+                getContent = ET.fromstring(req.content)
+                # data = getContent.find('asset')
+                # myList = []
+                # print(getContent.find('asset'))
 
-                print(rooT)
-                return {'locationresponse' : 'req.content.json()'}
+                for i in getContent:
+                    batch = {
+                        'assetName': i.get('fleet'),
+                        'assetid': i.get('id'),
+                        'lon': i.find('long').text,
+                        'lat': i.find('lat').text,
+                        'time': i.find('time').text,
+                        'sunit': i.find('speed').get('unit'),
+                        'speed': i.find('speed').text,
+                        'power': i.find('power').text
+                    }
+                # myList.append(batch)
+                    # print(myList)
+                print('MAIN',batch)
+                return {'locationresponse' : batch}
             else:
                 print('Error probably not a 200 response')
                 return { 'error': 'Got a NON 200 response'}

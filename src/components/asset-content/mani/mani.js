@@ -101,7 +101,7 @@ export default class Mani extends Component {
 		                <a href="#secondary-heading-and-columns" > Learn more</a>
 		              </Typography> 
 		              <br/>
-		              <Chip label="location" onDelete={() => {}} />
+		            
 		              <Location data={{'id':id,'gpsid':gps}}/>
 		            </div>
 

@@ -1,29 +1,38 @@
 import React, {Component} from 'react';
-
+import Chip from '@material-ui/core/Chip';
+import './location.css';
 
 
 export default class Location extends Component{
 	constructor (props){
 		super(props)
 		this.state = {
-			LocationDetails : [],
-			data : this.props.data
+			locationDetails : [],
+			data : this.props.data,
+			isComponentMounted : false
 		}
 	}
 
-
 	componentDidMount(){
 		this.fetchManiData()
+		this.setState({isComponentMounted : false})
 	}
+
+
+	componentWillUnmount(){
+		this.setState({isComponentMounted : false})
+    }
+
   	async fetchManiData() {
 
 		console.log('fetching location...')
-		const { data : { id=null, gpsid=null }} = this.state
-		this.setState({LocationDetails : []})
+		const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
+		this.setState({locationDetails : []})
 
 		if (gpsid === null){
-			console.log('This asset has no GPSID')
-			this.setState({gettingMani: false})
+			console.log(` Location :- Either Component unmounted or gps null unmouted==>${isComponentMounted} gps==> ${gpsid}`)
+			this.setState({gettingLocation: false})
+			return;
 		}else{
 			let bodyData = {
 			'params': {
@@ -37,7 +46,7 @@ export default class Location extends Component{
 		    })
 		    console.log('End',makeRequest)
 			const getLocationData = await makeRequest.json()
-			console.log(getLocationData)
+			// console.log(getLocationData)
 
 
 			if (makeRequest.status === 200) {
@@ -46,8 +55,8 @@ export default class Location extends Component{
 					this.setState({maniexists : false})
 				}else{
 					if (getLocationData) {
-						this.setState({LocationDetails : getLocationData.locationresponse})
-						console.log(getLocationData)
+						this.setState({locationDetails : getLocationData.locationresponse})
+						// console.log(getLocationData)
 					}else{
 						// this.setState({pathexists : false})
 						console.log('Error AFTER 200 status on fetch')
@@ -62,8 +71,14 @@ export default class Location extends Component{
 	}
 
 	render(){
+
+		const {locationDetails} = this.state
+		console.log(locationDetails)
 		return(
 			<div>
+				{
+					locationDetails.power == 'on' ? <Chip className='chip-on' label='On'/> : <Chip className='chip-off' label='Off'/>
+				}
 			</div>
 			)
 	}

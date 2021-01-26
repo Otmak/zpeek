@@ -4,7 +4,9 @@ import Path from './path';
 import Gendata from './gendata/gendata';
 import Mani from './mani/mani';// Header-for asset info
 
-
+					// <div className='gendata-container'>
+					// 	<Gendata data={id}/>
+					// </div>
 export default class AssetContainer extends Component {
 	constructor(props){
 		super(props)
@@ -23,9 +25,7 @@ export default class AssetContainer extends Component {
 					<Mani data={{'id':id, 'gps':gpsid}}/>
 				</div>
 				<div className='big-boys-container'>
-					<div className='gendata-container'>
-						<Gendata data={id}/>
-					</div>
+
 					<div className='path-container'>
 						<Path data={id}/>
 					</div>

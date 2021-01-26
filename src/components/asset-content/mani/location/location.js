@@ -9,31 +9,39 @@ export default class Location extends Component{
 		this.state = {
 			locationDetails : [],
 			data : this.props.data,
-			isComponentMounted : false
+			isComponentMounted : true,
+			isLocationLoading : true
 		}
 	}
 
 	componentDidMount(){
 		this.fetchManiData()
-		this.setState({isComponentMounted : false})
+		this.setState({isComponentMounted : true})
 	}
 
 
 	componentWillUnmount(){
+		console.log('Location COMPONENT UNMOUNTED')
 		this.setState({isComponentMounted : false})
     }
 
   	async fetchManiData() {
 
 		console.log('fetching location...')
-		const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
 		this.setState({locationDetails : []})
+		const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
 
-		if (gpsid === null){
-			console.log(` Location :- Either Component unmounted or gps null unmouted==>${isComponentMounted} gps==> ${gpsid}`)
-			this.setState({gettingLocation: false})
+
+		console.log('State Cleared!...........',isComponentMounted)
+		
+
+		if (!isComponentMounted || gpsid === null){
+			// console.log(` Location :- Either Component unmounted or gps null mouted?==>${isComponentMounted} gps==> ${gpsid}`)
+			this.setState({isLocationLoading: false})
 			return;
 		}else{
+			console.log('L :- setting state of Loading to TRUE ')
+			this.setState({isLocationLoading : true})
 			let bodyData = {
 			'params': {
 				'id': id,
@@ -44,18 +52,19 @@ export default class Location extends Component{
 		        body: JSON.stringify(bodyData),
 		        headers: {'Content-Type': 'application/json'}
 		    })
-		    console.log('End',makeRequest)
+		    // console.log('End',makeRequest)
 			const getLocationData = await makeRequest.json()
-			// console.log(getLocationData)
+			console.log('Done making request',getLocationData, isComponentMounted)
 
 
-			if (makeRequest.status === 200) {
+			if (makeRequest.status === 200 && isComponentMounted) {
 				if (getLocationData.error) {
 					console.log('Error in server ',getLocationData.error )
-					this.setState({maniexists : false})
+					this.setState({isLocationLoading : false})
 				}else{
-					if (getLocationData) {
-						this.setState({locationDetails : getLocationData.locationresponse})
+					if (getLocationData && isComponentMounted) {
+						console.log('Location on the way!')
+						this.setState({locationDetails : getLocationData.locationresponse, isLocationLoading : false})
 						// console.log(getLocationData)
 					}else{
 						// this.setState({pathexists : false})
@@ -63,7 +72,9 @@ export default class Location extends Component{
 					}
 				}
 			}else{
+				// console.log(`Error AFTER 200 status on fetch or Component is unmounted... COMP mounted?==>${isComponentMounted}`)
 				this.setSate({gettingMani: false})
+				return;
 			}
 		}
 
@@ -72,14 +83,15 @@ export default class Location extends Component{
 
 	render(){
 
-		const {locationDetails} = this.state
+		const {locationDetails, isLocationLoading} = this.state
+		const functionn = ()=> this.fetchManiData()
 		console.log(locationDetails)
 		return(
 			<div>
-				{
-					locationDetails.power == 'on' ? <Chip className='chip-on' label='On'/> : <Chip className='chip-off' label='Off'/>
+				{ isLocationLoading && <span> Loading..... </span> }
+				{!isLocationLoading &&
+					<div> {locationDetails.power === 'on' ? <Chip className='chip-on' label='On' onClick={functionn} /> : <Chip className='chip-off' label='Off'/> }</div>
 				}
 			</div>
-			)
-	}
+		)}
 }

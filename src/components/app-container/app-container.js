@@ -1,7 +1,4 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import TabAndPanel from '../tabs/tab';
-
 import TabComponent from '../tabs/tab';
 import HeaderAppBar from '../header/header-appbar';
 
@@ -13,7 +10,7 @@ export default function AppContainer(props) {
   return (
     <div>
       <HeaderAppBar/>
-        <TabComponent data={props.assets}> </TabComponent>
+      <TabComponent data={props.assets}> </TabComponent>
     </div>  
   );
 }

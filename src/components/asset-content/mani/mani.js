@@ -23,99 +23,108 @@ export default class Mani extends Component {
 		this.state = {
 			tabletMani: [],
 			assetInfo : this.props.data,
-			maniexists : false
+			maniexists : false,
+			displayIt : true
 		}
 	}
 
-	async fetchManiData() {
 
-		console.log('fetching MANI')
-		const { assetInfo : { id=null, gps=null }} = this.state
-
-		if (gps === null){
-			console.log('This asset has no GPSID')
-		}else{
-			let bodyData = {
-			'params': {
-				'id': id,
-				'gpsid': gps
-				}}
-			const makeRequest = await fetch('/mani', {
-		        method: 'POST',
-		        body: JSON.stringify(bodyData),
-		        headers: {'Content-Type': 'application/json'}
-		    })
-		    console.log('End',makeRequest)
-			const getManiData = await makeRequest.json()
-			console.log(getManiData)
-
-
-			if (makeRequest.status === 200) {
-				if (getManiData.error) {
-					console.log('Error in server bud')
-					this.setState({maniexists : false})
-				}else{
-					if (getManiData) {
-						this.setState({tabletMani : getManiData.maniresponse})
-						console.log(getManiData)
-					}else{
-						this.setState({maniexists : false})
-					}
-				}
-			}
-		}
-		return 'Done'
+	refresh(){
+		this.setState({ displayIt : true })
 	}
 
+	// async fetchManiData() {
+
+	// 	// console.log('fetching MANI')
+	// 	const { assetInfo : { id=null, gps=null }} = this.state
+
+	// 	if (gps === null){
+	// 		console.log('This asset has no GPSID')
+	// 	}else{
+	// 		let bodyData = {
+	// 		'params': {
+	// 			'id': id,
+	// 			'gpsid': gps
+	// 			}}
+	// 		const makeRequest = await fetch('/mani', {
+	// 	        method: 'POST',
+	// 	        body: JSON.stringify(bodyData),
+	// 	        headers: {'Content-Type': 'application/json'}
+	// 	    })
+	// 	    console.log('End',makeRequest)
+	// 		const getManiData = await makeRequest.json()
+	// 		console.log(getManiData)
+
+
+	// 		if (makeRequest.status === 200) {
+	// 			if (getManiData.error) {
+	// 				console.log('Error in server bud')
+	// 				this.setState({maniexists : false})
+	// 			}else{
+	// 				if (getManiData) {
+	// 					this.setState({tabletMani : getManiData.maniresponse})
+	// 					console.log(getManiData)
+	// 				}else{
+	// 					this.setState({maniexists : false})
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	return 'Done'
+	// }
 	render(){
 		// console.log(this)
-		const { assetInfo : { id=null, gps=null }, tabletMani=[]} = this.state
-		console.log('asset info:', id,gps)
-		console.log(this)
+		const { assetInfo : { id=null, gps=null }, displayIt} = this.state
+		console.log(`asset id : ${id}, gpsid : ${gps}`)
+		// console.log(this)
 		return(
-			<div className='mani-holder-container'>
-				<Accordion className='main-asset-data-panel' key={id} defaultExpanded>
-		          <AccordionSummary
-		            expandIcon={<ExpandMoreIcon />}
-		            aria-controls="panel1c-content"
-		            id="panel1c-header"
-		            className='left-helper'
-		          > 
-		            <div className='column'>
-		              <TabletAndroidIcon />
-		            </div>
-		            <div className='column'>
-		              <GpsFixedIcon/>
-		            </div>
-		          </AccordionSummary>
+			<div>
+			{ displayIt &&
+				<div className='mani-holder-container'>
+					<Accordion className='main-asset-data-panel' key={id} defaultExpanded>
+			          <AccordionSummary
+			            expandIcon={<ExpandMoreIcon />}
+			            aria-controls="panel1c-content"
+			            id="panel1c-header"
+			            className='left-helper'
+			          
+			          > 
+			            <div className='column'>
+			              <TabletAndroidIcon />
+			            </div>
+			            <div className='column'>
+			              <GpsFixedIcon/>
+			            </div>
+			          </AccordionSummary>
 
-		          <AccordionDetails>
-		            <div className='column left-helper'>
-		            	<Tablet data={{'id':id,'gpsid':gps}}/>
-		            </div>
-		            <div className='column left-helper'>
-		              <GPS data={{'id':id,'gpsid':gps}}/>
-		            </div>
-		            <div className='column helper'>
-		              <Typography variant="caption"> Select your destination of choice <br />
-		                <a href="#secondary-heading-and-columns" > Learn more</a>
-		              </Typography> 
-		              <br/>
-		            
-		              <Location data={{'id':id,'gpsid':gps}}/>
-		            </div>
+			          <AccordionDetails>
+			            <div className='column left-helper'>
+			            	<Tablet data={{'id':id,'gpsid':gps}}/>
+			            </div>
+			            <div className='column left-helper'>
+			              <GPS data={{'id':id,'gpsid':gps}}/>
+			            </div>
+			            <div className='column helper'>
+			              <Typography variant="caption"> Select your destination of choice <br />
+			                <a href="#secondary-heading-and-columns" > Learn more</a>
+			              </Typography> 
+			              <br/>
+			            
+			              <Location data={{'id':id,'gpsid':gps}}/>
+			            </div>
 
-		          </AccordionDetails>
+			          </AccordionDetails>
 
-		          <Divider />
-		          <AccordionActions>
-		        
-		            <Button onClick={()=> this.fetchManiData()} size="small" color="primary">
-		              Refresh
-		            </Button>
-		           </AccordionActions>
-	           </Accordion>
-			</div>
-		)
-	}
+			          <Divider />
+			          <AccordionActions>
+			        
+			            <Button onClick={()=>this.refresh()} size="small" color="primary">
+			              Refresh
+			            </Button>
+			           </AccordionActions>
+		           </Accordion>
+				</div>
+			}
+		</div>
+	)}
 }

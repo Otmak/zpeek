@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import './tablet.css'
+import './tablet.css';
+import Badge from '@material-ui/core/Badge';
 import Chip from '@material-ui/core/Chip';
-import DoneIcon from '@material-ui/icons/Done';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
@@ -10,14 +10,13 @@ import Typography from '@material-ui/core/Typography';
 
 
 export default class Tablet extends Component {
-
   constructor(props){
     super(props)
     this.state = {
       data : this.props.data,
       tabletMani : [],
       gettingMani : true,
-      isComponentMounted : false
+      isComponentMounted : true
     }
   }
 
@@ -32,22 +31,21 @@ export default class Tablet extends Component {
   }
 
 
-  hoverAction(){
-  	console.log('hover')
+  hoverAction(arg){
+  	console.log('hover',arg)
   }
 
 
   async fetchManiData() {
 
-	console.log('fetching MANI')
-	// const { assetInfo : { id=null, gps=null }} = this.state
+	console.log('getting ready for tablet mani...')
 	this.setState({tabletMani : []})
-	console.log(this)
+	// console.log(this)
 	const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
 
 
-	if (gpsid === null){
-		console.log(` Tablet :- Either Component unmounted or gps null unmouted==>${isComponentMounted} gps==> ${gpsid}`)
+	if (!isComponentMounted || gpsid === null){//add !isComponentMounted ||
+		console.log(` Tablet :- Either Component unmounted or gps null mouted==>${isComponentMounted} gps==> ${gpsid}`)
 		this.setState({gettingMani: false})
 		return;
 	}else{
@@ -56,31 +54,36 @@ export default class Tablet extends Component {
 			'id': id,
 			'gpsid': gpsid
 			}}
+		console.log('Seeting State GetMani to TRUE')
+		this.setState({gettingMani : true})
+		console.log(' State cleared, fetching tablet mani...')
+
 		const makeRequest = await fetch('/mani', {
 	        method: 'POST',
 	        body: JSON.stringify(bodyData),
 	        headers: {'Content-Type': 'application/json'}
 	    })
-	    console.log('End',makeRequest)
+	    // console.log('End',makeRequest)
 		const getManiData = await makeRequest.json()
-		// console.log(getManiData)
-
+		console.log(getManiData)
 
 		if (makeRequest.status === 200) {
 			if (getManiData.error) {
-				console.log('Error in server bud')
-				this.setState({maniexists : false})
+				console.log('Error in server bud.....also setting State getMani to false')
+				this.setState({gettingMani :false})
 			}else{
-				if (getManiData) {
-					this.setState({tabletMani : getManiData.maniresponse})
+				if (getManiData && isComponentMounted) {
 					console.log(getManiData)
+					this.setState({tabletMani : getManiData.maniresponse})
 				}else{
 					// this.setState({pathexists : false})
 					console.log('Error AFTER 200 status on fetch')
+					return;
 				}
 			}
 		}else{
-			this.setSate({gettingMani: false})
+			console.log(`Error AFTER 200 status on fetch or Component is unmounted... (is COMP mounted? ${isComponentMounted}), id=${id}, fetched res id=${getManiData.maniresponse}`)
+			return;
 		}
 	}
 
@@ -98,8 +101,11 @@ export default class Tablet extends Component {
   			console.log('Getting MANI?', gettingMani)
   			return (
   					<div>
-  					<Typography align='center'>No Manifest Data </Typography>
-  					<Button align='right' onClick={()=> this.fetchManiData()} color="primary">Get Mani</Button>
+  						{gettingMani && <span> Loading... </span>}
+	  					{ !gettingMani &&
+	  						<Typography align='center'>No Manifest Data </Typography>
+	  				
+	  					}
   					</div>
   				)
   		}else{
@@ -118,7 +124,7 @@ export default class Tablet extends Component {
   					'id':'tagNumber'
   				}]
   			// this.setState({gettingMani : false})
-  			console.log('Still getting MANI', gettingMani)
+  			console.log('Still getting MANI?', gettingMani)
   			return (
   				<div className='tablet-div-container'>
 			      <div className=''>
@@ -133,8 +139,6 @@ export default class Tablet extends Component {
 			              {`v ${firmware.versionCode}`}
 			            </Typography>
 			          </Grid>
-			        
-
 			        </Grid>
 			      	{
 			      		handleList.map( i =>{
@@ -151,9 +155,7 @@ export default class Tablet extends Component {
 		  					       	 </Typography>
 		  					       </Grid>
 		  					    </Grid>
-	  					    )
-			      		}
-			      		)
+	  					    )})
 			      	}
 			      </div>
 			      <Divider variant="middle" />
@@ -163,16 +165,18 @@ export default class Tablet extends Component {
 			        </Typography>
 			        <div> Apps : 
 			          {
-			          	packageManifest.apps.map( i=>(
-	          		      <Chip
-	          		      	key={i.zonarAppId}
-					        label={i.label}
-					        clickable
-					        color="primary"
-					        variant="outlined"
-					        onMouseOver={()=>this.hoverAction()}
-					      />
-			          	))
+			          	packageManifest.apps.map( i=>{
+			          		return (
+			          			<Badge badgeContent={i.order}  key={i.zonarAppId}>
+	  		          		      <Chip
+	  						        label={i.label}
+	  						        clickable
+	  						        color="primary"
+	  						        variant="outlined"
+	  						        onMouseOver={()=>this.hoverAction(i)}
+	  						      />
+	  						    </Badge>
+  				          	)})
 			          }
 			        </div>
 			      </div>
@@ -180,18 +184,15 @@ export default class Tablet extends Component {
 			        <Button onClick={()=> this.fetchManiData()} color="primary">Get Mani</Button>
 			      </div>
 	    		</div>
-  				)
-  		}
+			)}
   	}
 
   render(){
-  	// const {assetInfo, packageManifest} = this.state.tabletMani
-
-  	console.log(this)
+  	const {gettingMani} = this.state
+  	// console.log(this)
 	return (
 		<div>
 			{this.validateData()}
 		</div>
-	  );
-	}
+	)}
 }

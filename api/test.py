@@ -1,15 +1,18 @@
-from flask import Flask, render_template, jsonify, send_file, url_for, redirect,request
+from flask import Flask, render_template, jsonify, send_file, url_for, redirect, request
 import xml.etree.ElementTree as ET
 import requests
+
 # https://omi.zonarsystems.net/interface.php?customer=hol3292&username=zonar&password=PartyLikeIts.1999&action=showposition&operation=path&reqtype=dbid&target=194&version=2&starttime=1603971032&endtime=1608230858&logvers=3.8&format=json
 application = Flask(__name__)
 passwd = 'PartyLikeIts.1999'
 password = 'PartyLikeIts.1999'
 account = 'zhd0001'
 
+
 def makeAPIRequest():
     ''' User in any route to make api call detect errors with API call and maybe send email about error'''
     pass
+
 
 def toInt(s):
     if type(s) == str:
@@ -38,7 +41,6 @@ def get_assets():
         getData = ET.fromstring(res.content)
         data = getData.findall('asset')
 
-
         for i in data:
             # print( i.find('gps').text )
             myObj = {
@@ -55,7 +57,7 @@ def get_assets():
     return jsonify(myArray)
 
 
-@application.route('/mani', methods=['POST','GET'])
+@application.route('/mani', methods=['POST', 'GET'])
 def main():
     try:
         print('online!')
@@ -66,7 +68,7 @@ def main():
                 gpsid = dataFromClient['gpsid']
                 print('making request', gpsid)
                 maniUrl = f'https://omi.zonarsystems.net/gtc/interface.php?action=twentytwenty&username=zonar&password={passwd}&operation=getmanifest&format=json&gpssn={gpsid}&customer={account}&mobiledevicetypeid=2'
-                
+
                 req = requests.get(maniUrl)
                 # print('Done with request', str(req.content))
                 # print(type(req.content))
@@ -78,15 +80,15 @@ def main():
                 else:
                     errData = str(req.content)
                     print('Auth Failed for MANI')
-                    return {'error' : f'Authentication Failed==>{errData}'}
+                    return {'error': f'Authentication Failed==>{errData}'}
             except AssertionError as error:
-                print('Error before reques',error)
-                return {'error' : 'Something went wrong while making you request'}
+                print('Error before reques', error)
+                return {'error': 'Something went wrong while making you request'}
         else:
             print('No POST method')
     except AssertionError as error:
         print('Error occured in MAIN.', error)
-        return {'error' : 'Error making request for Mani'}
+        return {'error': 'Error making request for Mani'}
 
 
 @application.route('/location', methods=['GET', 'POST'])
@@ -97,7 +99,7 @@ def location():
             dataFromClient = request.get_json()['params']
             dbid = dataFromClient['id']
             print('making request', dbid)
-            print('post it w ma ====>',dbid)
+            print('post it w ma ====>', dbid)
             # dbid = 191
             # print(dbid)
             locationUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={password}&action=showposition&operation=current&format=xml&version=2&logvers=3&customer={account}&target={dbid}&reqtype=dbid'
@@ -105,12 +107,13 @@ def location():
             req = requests.get(locationUrl)
 
             if req.status_code == 200:
-                print('Looking good....',req.status_code)
+                print('Looking good....', req.status_code)
                 # rooT = ET.fromstring(req.content)
                 getContent = ET.fromstring(req.content)
                 # data = getContent.find('asset')
                 # myList = []
                 # print(getContent.find('asset'))
+                batch = {}
 
                 for i in getContent:
                     batch = {
@@ -124,18 +127,17 @@ def location():
                         'power': i.find('power').text
                     }
                 # myList.append(batch)
-                    # print(myList)
-                print('MAIN',batch)
-                return {'locationresponse' : batch}
+                    # print(batch)
+                print('MAIN', batch)
+                return {'locationresponse': batch}
             else:
                 print('Error probably not a 200 response')
-                return { 'error': 'Got a NON 200 response'}
+                return {'error': 'Got a NON 200 response'}
         else:
             print('Not post method')
     except AssertionError as error:
         print('Error in Main', )
-        return {'error' : f'Error in MAIN '}
-
+        return {'error': f'Error in MAIN '}
 
 
 @application.route('/gpsunit', methods=['GET', 'POST'])
@@ -146,9 +148,9 @@ def gpsunit():
             dataFromClient = request.get_json()['params']
             gpsID = dataFromClient['gpsid']
 
-            try: 
+            try:
                 gpsUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={password}&action=showopen&operation=showgps&target={gpsID}&reqtype=gpssn&format=xml'
-                
+
                 print('Making request with ==>', gpsID)
                 req = requests.get(gpsUrl)
                 print('Done making request', req)
@@ -160,7 +162,7 @@ def gpsunit():
                     print(data)
                     myList = []
                     for i in getContent:
-                        print(i.get('id'), i.get('sn'), i.get('lastinspdate'),i.find('lastpositiondate'))
+                        print(i.get('id'), i.get('sn'), i.get('lastinspdate'), i.find('lastpositiondate'))
                         batch = {
                             'gpsdbid': i.get('id'),
                             'gpsid': i.get('sn'),
@@ -177,14 +179,14 @@ def gpsunit():
                     print('Error making request, probably not 200')
             except AssertionError as error:
                 print('Error before or while making request', error)
-                return { 'error': 'error after making request'}
+                return {'error': 'error after making request'}
         else:
             print('Not post method')
 
 
     except AssertionError as error:
         print('Error in MAin GPSUnits')
-        return {'error' : 'Making your initial request'}
+        return {'error': 'Making your initial request'}
 
 
 @application.route('/path', methods=['GET', 'POST'])
@@ -198,14 +200,14 @@ def path():
         print(ourData)
 
         if request.method == 'POST':
-            print('POST it w ma Brah>>>>>>>', ourData )
+            print('POST it w ma Brah>>>>>>>', ourData)
             try:
 
                 dataFromClient = request.get_json()['params']
                 start = dataFromClient['stime']
                 end = dataFromClient['etime']
                 dbId = dataFromClient['dbId']
-                print('PARAMS READY!....===> sending ', start,end,dbId,passwd)
+                print('PARAMS READY!....===> sending ', start, end, dbId, passwd)
 
                 pathUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={passwd}&action=showposition&operation=path&reqtype=dbid&target={int(dbId)}&version=2&starttime={int(start)}&endtime={int(end)}&logvers=3.8&format=json'
                 # print('BODY:', star)
@@ -215,30 +217,30 @@ def path():
                 print('Starting JSON conversion!....')
                 path_req_data = res.json()
                 print('DONE WITH CONVERSION!....')
-                print("WEB API RES:",res)
+                print("WEB API RES:", res)
                 if res.status_code == 200:
                     print('AUTH SUCSESS')
                     if not path_req_data.get('pathevents'):
                         if path_req_data.get('error'):
-                            print('No path data',path_req_data.get('error'))
-                            return {'error' : path_req_data.get('error')}
+                            print('No path data', path_req_data.get('error'))
+                            return {'error': path_req_data.get('error')}
                         else:
-                            return {'error' : 'There was an Error wiht the request'}
+                            return {'error': 'There was an Error wiht the request'}
                     else:
                         path_data = path_req_data.get('pathevents')
                         if path_data.get('assets') == None:
                             print(path_req_data)
                             print('FOUND PATH BUT ITS NONE')
-                            return {'error' : 'This Asset has no data'}
+                            return {'error': 'This Asset has no data'}
                         else:
-                            return {'pathresponse' : path_data.get('assets')}
+                            return {'pathresponse': path_data.get('assets')}
                 else:
                     print('******ATTENTION*******  AUTH FAILED')
                     print(f'ERROR : {str(res.content.decode("utf-8"))}')
                     return {'error': 'There was an Authentication Error'}
             except:
                 print('Error before request')
-                return {'error' : 'Something Went wrong in the back-end, thats all I know.'}
+                return {'error': 'Something Went wrong in the back-end, thats all I know.'}
         else:
             print('Not POST method')
             return {'error': 'POST method only Allowed.'}
@@ -247,6 +249,7 @@ def path():
         # print(error)
         print('ERROR')
         return {'error ': 'An Error in path happened'}
+
 
 @application.route('/gendata', methods=['GET', 'POST'])
 def gendata():
@@ -272,7 +275,6 @@ def gendata():
                 bigData = {}
                 listcount = 1
 
-
                 for i in gendataXML:
                     # print(bigData)
                     count += 1
@@ -289,13 +291,14 @@ def gendata():
                         ourCache[key] = listcount
                         theLabels = bigData.get(key)['labels']
                         theLabels.append(i.get('label'))
-                    
+
                         # theLabels.push(bigData.get(key)['labels'][0])
                         # print(bigData.get(key)['labels']) assign to vari then see if push works
 
                         existingValue = bigData.get(key)['events']
 
-                        if type(existingValue) is list: # un-nessesary just assign value to variable and append to it and put it back on events
+                        if type(
+                                existingValue) is list:  # un-nessesary just assign value to variable and append to it and put it back on events
                             allEventsList = []
                             # print('******ITS A LIST*****')
                             # print(f'LENTH OF LIST: {len(existingValue)}')
@@ -331,10 +334,11 @@ def gendata():
                 return {'gendata': myArray}
             except:
                 print('somn went wrong bruh, looks like its inside PXMLJ')
+
         return jsonify(parseReqtoJson(data))
-    except :
+    except:
         print('somn Error in /gendata main.')
-        return {'error' : 'An Error occurred in GendataMain'}
+        return {'error': 'An Error occurred in GendataMain'}
 
 
 @application.route('/test')

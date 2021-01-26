@@ -1,15 +1,7 @@
 import React, {Component} from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import AppBar from '@material-ui/core/AppBar';
-import IconButton from '@material-ui/core/IconButton';
-import Fab from '@material-ui/core/Fab';
-import MenuIcon from '@material-ui/icons/Menu';
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import './tabs.css'
 import List from '@material-ui/core/List';
-import Toolbar from '@material-ui/core/Toolbar';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -22,7 +14,7 @@ import AssetContainer from '../asset-content/asset-container';
 // think aabout re-designing this to fit, added functionlly ty
 //This is a dev file VerticalTabs prod
 
-class TabComponent extends Component {
+export default class TabComponent extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -76,7 +68,7 @@ class TabComponent extends Component {
     const { searchFeild, loading } = this.state;
     // console.log(this)
     const assetList = this.props.data
-    const activeAssetsList = assetList.filter( asset=> asset.status == '1')
+    // const activeAssetsList = assetList.filter( asset=> asset.status == '1')
     const lowercaseSearchFilter = searchFeild.toLowerCase()
 
 
@@ -86,13 +78,13 @@ class TabComponent extends Component {
 
       // console.log('Log filterGpsAsset:',filterGpsId)
 
-    const filterAssetNumber = assetList.filter(item => {
-      return item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
-    })
+    // const filterAssetNumber = assetList.filter(item => {
+    //   return item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
+    // })
 
-    const filteredData = assetList.filter(item => {
-      return item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
-    })// add filter for searching GPSID
+    // const filteredData = assetList.filter(item => {
+    //   return item['assetNumber'].toLowerCase().includes(lowercaseSearchFilter)
+    // })// add filter for searching GPSID
 
     // console.log('LOgging Filter...:',filteredData)
 
@@ -121,8 +113,8 @@ class TabComponent extends Component {
                   <List className='tabItem'>
                     <ListItem>
                       <ListItemAvatar>
-                        <Avatar className={ i.status == '1' ? 'active-assetList-avatar' : 'inactive-assetList-avatar'}>
-                          {i.status == '1'? 'a' : 'i'}
+                        <Avatar className={ i.status === '1' ? 'active-assetList-avatar' : 'inactive-assetList-avatar'}>
+                          {i.status === '1'? 'a' : 'i'}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText primary={i.assetNumber} secondary={i.type} />
@@ -132,7 +124,7 @@ class TabComponent extends Component {
                 </Tab>  
             )}
           </TabList>
-          
+
             { 
               filterAssetOrGpsId.map( i=> 
                 <TabPanel key={i.key} className='tab-panel'>
@@ -146,7 +138,7 @@ class TabComponent extends Component {
   }
 }
 
-export default TabComponent;
+
 
 
 

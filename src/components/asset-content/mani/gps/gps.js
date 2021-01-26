@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './gps.css';
-import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -8,33 +7,36 @@ import Typography from '@material-ui/core/Typography';
 
 
 export default class GPS extends Component {
-
   constructor(props){
     super(props)
     this.state = {
       data : this.props.data,
       gpsData : [],
-      gpsLoading : true,
-      isComponentMounted : false
+      isGPSLoading : true,
+      isComponentMounted : true,
+      isParamEmpty : false
     }
   }
 
   componentDidMount(){
+  	this.fetchGpsData()
   	this.setState({isComponentMounted : true})
-  	this.fetchManiData()
   }
 
   componentWillUnmount(){
   	this.setState({isComponentMounted : false})
   }
 
-  async fetchManiData() {
-	console.log('fetching MANI')
-	const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
 
-	if ( gpsid === null ){
-		console.log(`GPS :- Either Component unmounted or gps null unmouted==>${isComponentMounted} gps==> ${gpsid}` )
-		// this.setState({gpsLoading: false})
+  async fetchGpsData() {
+	// console.log('fetching gps...')
+	const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
+	this.setState({gpsData : [] })
+		console.log('fetching.. ', gpsid)
+
+	if ( !isComponentMounted || gpsid === null ){
+		// console.log(`GPS :- Either Component unmounted or gps null mouted==>${isComponentMounted} gps==> ${gpsid}` )
+		this.setState({isGPSLoading: false, isParamEmpty : true})
 		return;
 	}else{
 		let bodyData = {
@@ -52,23 +54,24 @@ export default class GPS extends Component {
 		const getGpsData = await makeRequest.json()
 		// console.log(getManiData)
 
-		if (makeRequest.status === 200) {
+		if (makeRequest.status === 200 || isComponentMounted) {
 			if (getGpsData.error) {
 				console.log('Error in server bud')
-				this.setState({gpsLoading : false})
+				this.setState({isGPSLoading : false})
 			}else{
 				// console.log(getGpsData)
 				this.setState({gpsData : getGpsData.gpsdata})
 			}
 		}else{
-			this.setSate({gpsLoading: false})
+			// console.log(`Error after 200 or comp unmounted. is COMP mouted? ====> ${isComponentMounted}`)
+			this.setSate({isGPSLoading: false})
 		}
 	}
 	return 'Done'
 	}
 
 	gpsdataresponse = ()=>{
-		const {gpsData} = this.state
+		const {gpsData, isGPSLoading, isParamEmpty} = this.state
   		const gpsList =  [
 	  		{
 	  			'name':'Asset DB ID',
@@ -98,7 +101,17 @@ export default class GPS extends Component {
 
   		if (gpsData[0] === undefined) {
   			// console.log('No gps data')
-  			return(<Typography align='center'>No gps data </Typography>)
+  			return(
+  				<div>
+  					{ isGPSLoading && <span> Loading.... </span> }
+	  				{ !isGPSLoading && isParamEmpty &&
+	  					<div>
+		  					<Typography align='center'>No gps data </Typography>
+		  					<Button align='right' onClick={()=> this.fetchGpsData()} color="primary">Get gps</Button>
+	  					</div>
+	  				}
+  				</div>
+  				)
   		}else{
   			const getGPSDATA = gpsData[0]
   			// console.log(getGPSDATA,getGPSDATA[0])
@@ -141,12 +154,13 @@ export default class GPS extends Component {
   	}
 
   render(){
-  	// const {gpsData} = this.state
-  	console.log(this)
+  	const {gpsData, isGPSLoading, isComponentMounted} = this.state
+  	console.log('GPS :- ', this)
+  	// console.log(`GPS:${gpsData}, is GPs loading?${gpsLoading}, is comp mounted?${isComponentMounted}`)
 
 	return (
 		<div>
-			{this.gpsdataresponse()}
+			{ this.gpsdataresponse() }
 		</div>
 	  );
 	}

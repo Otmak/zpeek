@@ -62,25 +62,24 @@ export default function ControlledAccordions() {
       {
         data.map( i => {
           const {id, name, age, story} = i
-        return (
-        <Accordion expanded={expanded === id } onChange={handleChange(id)}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography className={classes.heading}>{age}</Typography>
-          <Typography className={classes.secondaryHeading}>{name}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            {story}
-          </Typography>
-        </AccordionDetails>
-      </Accordion>)
-
-      })}
-      
+          return (
+              <Accordion expanded={expanded === id } onChange={handleChange(id)}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
+                >
+                  <Typography className={classes.heading}>{age}</Typography>
+                  <Typography className={classes.secondaryHeading}>{name}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    {story}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+          )})
+      }
     </div>
   );
 }

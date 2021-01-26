@@ -8,9 +8,6 @@ import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
-import LaptopMacIcon from '@material-ui/icons/LaptopMac';
-import HotelIcon from '@material-ui/icons/Hotel';
-import RepeatIcon from '@material-ui/icons/Repeat';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
@@ -69,10 +66,10 @@ class Gendata extends Component {
 
   render(){
     const { data, accordionActive } = this.state
-    const loded =  Object.entries(data).map(([key, b]) => {
-      // console.log(typeof key)
-      // console.log(`${key} =====> ${b.labels}`)
-    })
+    // const loded =  Object.entries(data).map(([key, b]) => {
+    //   // console.log(typeof key)
+    //   // console.log(`${key} =====> ${b.labels}`)
+    // })
     const timeStmp = (epTime)=>{
       let ntime = new Date(epTime * 1000)
       // console.log(typeof ntime)

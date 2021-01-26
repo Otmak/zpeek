@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './path.css'
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 //add tooltip to help explain some functions
-class Path extends Component {
+export default class Path extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
@@ -103,9 +102,6 @@ class Path extends Component {
 
 	render(){
 		const { pathexists, theId, data, comingsoon } = this.state
-		function createData(name, calories, fat, carbs, protein) {
-		  return { name, calories, fat, carbs, protein };
-		}
 		const pathReasonCodes = (reason) => {
 			const referenceData = {
 				0: 'r',
@@ -135,7 +131,7 @@ class Path extends Component {
 			  			resultsArray.push(referenceData[inputResean])
 			 		 }	
 				}
-			}else{// check if input == type integer 
+			}else{// if type not string
 			console.log('Its a number or something other than string', reason)
 			}
 			return resultsArray
@@ -199,14 +195,12 @@ class Path extends Component {
    	   				              <TableCell align="right">{row.lat}</TableCell>
    	   				              <TableCell align="right">{row.lng}</TableCell>
    	   				            </TableRow>
-   	   				          ))}
+   	   				          ))
+   	   				          }
    	   				        </TableBody>
    	   				      </Table>
    	   				    </TableContainer>
 				   	}
 			</div>
-			)
-	}
+		)}
  }
-
-export default Path;

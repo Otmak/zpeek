@@ -1,18 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './header-appbar.css'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Switch from '@material-ui/core/Switch';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
-import TabAndPanel from '../tabs/tab';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import TabComponent from '../tabs/tab';
+
 
 function ElevationScroll(props) {
   const { children, window } = props;
@@ -41,11 +34,11 @@ function ElevationScroll(props) {
 
 export default function HeaderAppBar(props) {
   // console.log('PROPS INSIDE APPBARContainer COMP:' ,props)
-  const [color, setColor] = React.useState('default');
+  // const [color, setColor] = React.useState('default');
   const appBarStyle = { background: 'linear-gradient(90deg, #4598DC, #B06AB3 )'}
-  const handleChange = (event) => {
-    setColor(event.target.checked ? 'blue' : 'default');
-  };
+  // const handleChange = (event) => {
+  //   setColor(event.target.checked ? 'blue' : 'default');
+  // };
   const handleOpen = ()=> {
     console.log('Clicked')
   }

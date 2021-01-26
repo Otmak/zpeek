@@ -1,7 +1,9 @@
-.chip-on {
+div .chip-on {
 	background-color: green;
+	color: #fff;
 }
 
-.chip-off {
+div .chip-off {
 	background-color: red;
+	color: #fff;
 }

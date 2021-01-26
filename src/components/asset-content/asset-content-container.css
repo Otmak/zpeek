@@ -9,5 +9,7 @@
 .big-boys-container  { 
 	display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
+    grid-gap: 0.7rem;
+    margin-top: 1em;
+    overflow: hidden;
 }

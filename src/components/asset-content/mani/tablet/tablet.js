@@ -10,24 +10,26 @@ import Typography from '@material-ui/core/Typography';
 
 
 export default class Tablet extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      data : this.props.data,
-      tabletMani : [],
-      gettingMani : true,
-      isComponentMounted : true
-    }
-  }
+	_isMounted = false;
+	constructor(props){
+	super(props)
+	this.state = {
+	  data : this.props.data,
+	  tabletMani : [],
+	  gettingMani : true,
+	  isComponentMounted : true
+	}
+	}
 
-  componentDidMount(){
-  	this.fetchManiData()
-  	this.setState({isComponentMounted : true})
-  	
-  }
+	componentDidMount(){
+		this._isMounted = true;
+		this.fetchManiData()
+		this.setState({isComponentMounted : true})
+		
+	}
 
     componentWillUnmount(){
-  	this.setState({isComponentMounted : false})
+    	this._isMounted = false;
   }
 
 
@@ -41,7 +43,7 @@ export default class Tablet extends Component {
 	console.log('getting ready for tablet mani...')
 	this.setState({tabletMani : []})
 	// console.log(this)
-	const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
+	const { data : { id=null, gpsid=null, account, hashed }, isComponentMounted} = this.state
 
 
 	if (!isComponentMounted || gpsid === null){//add !isComponentMounted ||
@@ -52,7 +54,9 @@ export default class Tablet extends Component {
 		let bodyData = {
 		'params': {
 			'id': id,
-			'gpsid': gpsid
+			'gpsid': gpsid,
+			'account': account, 
+			'hashed': hashed
 			}}
 		console.log('Seeting State GetMani to TRUE')
 		this.setState({gettingMani : true})
@@ -72,7 +76,7 @@ export default class Tablet extends Component {
 				console.log('Error in server bud.....also setting State getMani to false')
 				this.setState({gettingMani :false})
 			}else{
-				if (getManiData && isComponentMounted) {
+				if (getManiData && this._isMounted ) {
 					console.log(getManiData)
 					this.setState({tabletMani : getManiData.maniresponse})
 				}else{
@@ -103,7 +107,10 @@ export default class Tablet extends Component {
   					<div>
   						{gettingMani && <span> Loading... </span>}
 	  					{ !gettingMani &&
+	  						<div>
 	  						<Typography align='center'>No Manifest Data </Typography>
+	  						<Button align='right' onClick={()=> this.fetchManiData()} color="primary">Get mani</Button>
+	  						</div>
 	  				
 	  					}
   					</div>

@@ -18,7 +18,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://otuma.io/">
-        Otuma.io
+        otuma.io
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -57,8 +57,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+export default function SignInFirst(props) {
   const classes = useStyles();
+  const letsGetStarted = (e)=>{
+    e.preventDefault()
+
+    console.log('fetching... your data', e)
+
+  }
+
+  const getFormData = (e) => {
+    console.log(e.target.name,':',e.target.value)
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -75,21 +85,23 @@ export default function SignInSide() {
           <form className={classes.form} noValidate>
             <TextField
               variant="outlined"
+              onChange={props.getFormData}
               margin="normal"
               required
               fullWidth
               id="account"
               label="Account code"
-              name="account"
+              name="accountCode"
               autoComplete="email"
               autoFocus
             />
             <TextField
               variant="outlined"
+              onChange={props.getFormData}
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="passWord"
               label="Password"
               type="password"
               id="password"
@@ -103,6 +115,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
+              onClick={props.letsGetStarted}
               color="primary"
               className={classes.submit}
             >

@@ -4,6 +4,7 @@ import './location.css';
 
 
 export default class Location extends Component{
+	_isMounted = false;
 	constructor (props){
 		super(props)
 		this.state = {
@@ -15,12 +16,14 @@ export default class Location extends Component{
 	}
 
 	componentDidMount(){
+		this._isMounted = true;
 		this.fetchManiData()
 		this.setState({isComponentMounted : true})
 	}
 
 
 	componentWillUnmount(){
+		this._isMounted = false;
 		console.log('Location COMPONENT UNMOUNTED')
 		this.setState({isComponentMounted : false})
     }
@@ -29,7 +32,7 @@ export default class Location extends Component{
 
 		console.log('fetching location...')
 		this.setState({locationDetails : []})
-		const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
+		const { data : { id=null, gpsid=null, account, hashed }, isComponentMounted} = this.state
 
 
 		console.log('State Cleared!...........',isComponentMounted)
@@ -45,7 +48,9 @@ export default class Location extends Component{
 			let bodyData = {
 			'params': {
 				'id': id,
-				'gpsid': gpsid
+				'gpsid': gpsid,
+				'account':account,
+				'hashed':hashed
 				}}
 			const makeRequest = await fetch('/location', {
 		        method: 'POST',
@@ -57,7 +62,7 @@ export default class Location extends Component{
 			console.log('Done making request',getLocationData, isComponentMounted)
 
 
-			if (makeRequest.status === 200 && isComponentMounted) {
+			if (makeRequest.status === 200 && this._isMounted ) {
 				if (getLocationData.error) {
 					console.log('Error in server ',getLocationData.error )
 					this.setState({isLocationLoading : false})

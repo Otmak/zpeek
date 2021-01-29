@@ -4,9 +4,9 @@ import requests
 
 # https://omi.zonarsystems.net/interface.php?customer=hol3292&username=zonar&password=PartyLikeIts.1999&action=showposition&operation=path&reqtype=dbid&target=194&version=2&starttime=1603971032&endtime=1608230858&logvers=3.8&format=json
 application = Flask(__name__)
-passwd = 'PartyLikeIts.1999'
+# passwd = 'PartyLikeIts.1999'
 password = 'PartyLikeIts.1999'
-account = 'zhd0001'
+# account = 'KRA5602'
 
 
 def makeAPIRequest():
@@ -26,9 +26,16 @@ def index():
     return 'online'
 
 
-@application.route('/assets', methods=['GET'])
+@application.route('/assets', methods=['GET', 'POST'])
 def get_assets():
     try:
+        InitialDataFromClient = request.get_json()['account']
+        account = request.get_json()['account']
+        passwd = request.get_json()['hashed']
+
+        print(f'Making requesting with ...... {account}, {passwd}')
+
+
         url = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={passwd}&action=showopen&operation=showassets&format=xml'
         res = requests.get(url)
         if res.status_code == 200:
@@ -52,9 +59,15 @@ def get_assets():
                 'type': i.find('type').text
             }
             myArray.append(myObj)
+
+        # print(myArray)
+
+
+        # add some checking and validation to prevent errors
+        return jsonify(myArray)
     except:
         print('There is an Error in main')
-    return jsonify(myArray)
+    return {'error' : 'some Error in Server'}
 
 
 @application.route('/mani', methods=['POST', 'GET'])
@@ -66,6 +79,8 @@ def main():
             try:
                 dataFromClient = request.get_json()['params']
                 gpsid = dataFromClient['gpsid']
+                account = dataFromClient['account']
+                passwd = dataFromClient['hashed']
                 print('making request', gpsid)
                 maniUrl = f'https://omi.zonarsystems.net/gtc/interface.php?action=twentytwenty&username=zonar&password={passwd}&operation=getmanifest&format=json&gpssn={gpsid}&customer={account}&mobiledevicetypeid=2'
 
@@ -98,11 +113,13 @@ def location():
         if request.method == 'POST':
             dataFromClient = request.get_json()['params']
             dbid = dataFromClient['id']
+            account = dataFromClient['account']
+            passwd = dataFromClient['hashed']
             print('making request', dbid)
             print('post it w ma ====>', dbid)
             # dbid = 191
             # print(dbid)
-            locationUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={password}&action=showposition&operation=current&format=xml&version=2&logvers=3&customer={account}&target={dbid}&reqtype=dbid'
+            locationUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={passwd}&action=showposition&operation=current&format=xml&version=2&logvers=3&customer={account}&target={dbid}&reqtype=dbid'
             print('lo')
             req = requests.get(locationUrl)
 
@@ -147,9 +164,11 @@ def gpsunit():
         if request.method == 'POST':
             dataFromClient = request.get_json()['params']
             gpsID = dataFromClient['gpsid']
+            account = dataFromClient['account']
+            passwd = dataFromClient['hashed']
 
             try:
-                gpsUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={password}&action=showopen&operation=showgps&target={gpsID}&reqtype=gpssn&format=xml'
+                gpsUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={passwd}&action=showopen&operation=showgps&target={gpsID}&reqtype=gpssn&format=xml'
 
                 print('Making request with ==>', gpsID)
                 req = requests.get(gpsUrl)
@@ -207,6 +226,9 @@ def path():
                 start = dataFromClient['stime']
                 end = dataFromClient['etime']
                 dbId = dataFromClient['dbId']
+                account = dataFromClient['account']
+                passwd = dataFromClient['hashed']
+
                 print('PARAMS READY!....===> sending ', start, end, dbId, passwd)
 
                 pathUrl = f'https://omi.zonarsystems.net/interface.php?customer={account}&username=zonar&password={passwd}&action=showposition&operation=path&reqtype=dbid&target={int(dbId)}&version=2&starttime={int(start)}&endtime={int(end)}&logvers=3.8&format=json'

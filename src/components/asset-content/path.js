@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import DateTimePicker from '../datetime/datetime-picker'
 
 //add tooltip to help explain some functions
 export default class Path extends Component {
@@ -19,7 +20,8 @@ export default class Path extends Component {
 			pathexists : true,
 			theId : this.props.data,
 			startDate: new Date().setHours(0,0,0,0)/1000.0,
-			endDate: new Date().setHours(23,59,0,0)/1000.0
+			endDate: new Date().setHours(23,59,0,0)/1000.0,
+			isComponentMounted:true
 		}
 	}
 
@@ -28,6 +30,10 @@ export default class Path extends Component {
 		// return this.fetchPathData() WORKS!
 	
 	}
+
+	componentWillUnmount(){
+		this.setState({isComponentMounted : false})
+  }
 
 	// getDateTimeValue(e){
 	// 	// consider getting the timestandp from submit to calculate how long your app takes
@@ -51,6 +57,8 @@ export default class Path extends Component {
 		let dateTimeValue = e.target.value
   		let dateTimeId  = e.target.id
 
+  		console.log(dateTimeValue, dateTimeId)
+
   		let epTime = new Date(dateTimeValue)
 		let selectedEpochTimeInMunites = epTime.getTime()/1000.0
 
@@ -66,7 +74,7 @@ export default class Path extends Component {
 	async fetchPathData ()  {
 		// let start = 1603971032
 		// let end = 1608230858
-		const {theId, startDate, endDate} = this.state
+		const {theId, startDate, endDate, isComponentMounted} = this.state
 		console.log('Start',this)
 
 		let bodyData = {
@@ -88,11 +96,12 @@ export default class Path extends Component {
 				console.log('Error in server bud')
 				this.setState({pathexists : false})
 			}else{
-				if (getPathData.pathresponse[0].id == theId) {
+				if (getPathData.pathresponse[0].id == theId && isComponentMounted) {
 					this.setState({data : getPathData.pathresponse[0].events})
 					console.log(getPathData.pathresponse[0].id, theId)
 				}else{
-					this.setState({pathexists : false})
+					// this.setState({pathexists : false})
+					return;
 				}
 			}
 		}
@@ -140,26 +149,8 @@ export default class Path extends Component {
 		// console.log(data, this)
 
 		return (
-			<div>
-				<div>
-					<TextField
-					id="startDate"
-					variant='outlined'
-					label="Start"
-					type="datetime-local"
-					onChange={ (e) => this.getDateTime(e)}
-					InputLabelProps={{ shrink: true,}}
-				 	/>
-				 	<TextField
-					id="endDate"
-					variant='outlined'
-					label="End"
-					type="datetime-local"
-					onChange={ (e) => this.getDateTime(e)}
-					InputLabelProps={{ shrink: true,}}
-					 />
-					      <Button onClick={()=> this.fetchPathData()} variant="outlined" color="primary" href="#outlined-buttons"> Get Path </Button>
-				</div>
+			<React.Fragment>
+				<DateTimePicker className='date-time-picker' label='Get Path' getsdate={ (e) => this.getDateTime(e)} getedate={ (e) => this.getDateTime(e)}/>
 				   { 
 				   		<TableContainer component={Paper}>
    	   				      <Table className="classes.table" aria-label="simple table">
@@ -183,7 +174,6 @@ export default class Path extends Component {
    	   				        <TableBody>
    	   				          {data.map((row) => (
    	   				            <TableRow key={row.time}>
-
    	   				              <TableCell component="th" scope="row">
    	   				                {row.source}
    	   				              </TableCell>
@@ -201,6 +191,6 @@ export default class Path extends Component {
    	   				      </Table>
    	   				    </TableContainer>
 				   	}
-			</div>
+			</React.Fragment>
 		)}
  }

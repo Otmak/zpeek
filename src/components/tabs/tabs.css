@@ -1,3 +1,6 @@
+.solid-tab-container > div {
+    top:auto;
+}
 div .tabs-container{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -12,6 +15,14 @@ div .tabs-container{
     float: left;
 
 }
+
+/*.asset-list-text {
+    color: #4598DC;
+}
+
+.asset-list-text > p {
+    color: #4598DC;
+}*/
 /*  .appBar: {
     top: 'auto';
     bottom: 0;

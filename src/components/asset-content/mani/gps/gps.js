@@ -7,30 +7,33 @@ import Typography from '@material-ui/core/Typography';
 
 
 export default class GPS extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      data : this.props.data,
-      gpsData : [],
-      isGPSLoading : true,
-      isComponentMounted : true,
-      isParamEmpty : false
-    }
-  }
+	_isMounted = false;		
+	constructor(props){
+	super(props)
+	this.state = {
+	  data : this.props.data,
+	  gpsData : [],
+	  isGPSLoading : true,
+	  isComponentMounted : true,
+	  isParamEmpty : false
+	}
+	}
 
   componentDidMount(){
+  	this._isMounted = true;
   	this.fetchGpsData()
   	this.setState({isComponentMounted : true})
   }
 
   componentWillUnmount(){
+  	this._isMounted = false;
   	this.setState({isComponentMounted : false})
   }
 
 
   async fetchGpsData() {
 	// console.log('fetching gps...')
-	const { data : { id=null, gpsid=null }, isComponentMounted} = this.state
+	const { data : { id=null, gpsid=null, account, hashed }, isComponentMounted} = this.state
 	this.setState({gpsData : [] })
 		console.log('fetching.. ', gpsid)
 
@@ -42,7 +45,9 @@ export default class GPS extends Component {
 		let bodyData = {
 		'params': {
 			'id': id,
-			'gpsid': gpsid
+			'gpsid': gpsid,
+			'account': account, 
+			'hashed': hashed
 			}}
 		const makeRequest = await fetch('/gpsunit', {
 	        method: 'POST',
@@ -54,7 +59,7 @@ export default class GPS extends Component {
 		const getGpsData = await makeRequest.json()
 		// console.log(getManiData)
 
-		if (makeRequest.status === 200 || isComponentMounted) {
+		if (makeRequest.status === 200 && this._isMounted ) {
 			if (getGpsData.error) {
 				console.log('Error in server bud')
 				this.setState({isGPSLoading : false})

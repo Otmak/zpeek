@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+/*  display: grid;
+  grid-template-areas: 'nav nav nav nav'
+                       'tab content content content';*/
 }
 ul {
   margin: 0;

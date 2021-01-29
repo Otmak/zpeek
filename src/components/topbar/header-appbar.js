@@ -1,11 +1,36 @@
-import React from 'react';
-import './header-appbar.css'
+import React, { useState } from 'react';
+import './header-appbar.css';
+import TestT from './test-t';
 import AppBar from '@material-ui/core/AppBar';
+import Drawer from '@material-ui/core/Drawer';
+import MenuIcon from '@material-ui/icons/Menu';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import AppContainer from '../app-container/app-container';
 
+
+const drawerWidth = 240;
+const useStyles = makeStyles((theme) => ({
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    // necessary for content to be below app bar
+    justifyContent: 'flex-start',
+  },
+}));
 
 function ElevationScroll(props) {
   const { children, window } = props;
@@ -35,6 +60,19 @@ function ElevationScroll(props) {
 export default function HeaderAppBar(props) {
   // console.log('PROPS INSIDE APPBARContainer COMP:' ,props)
   // const [color, setColor] = React.useState('default');
+  const [open, setOpen] = useState(false);
+  const [activeOnlyList, setList] = useState({activeOnly : false});
+
+  const classes = useStyles();
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+
   const appBarStyle = { background: 'linear-gradient(90deg, #4598DC, #B06AB3 )'}
   // const handleChange = (event) => {
   //   setColor(event.target.checked ? 'blue' : 'default');
@@ -42,6 +80,23 @@ export default function HeaderAppBar(props) {
   const handleOpen = ()=> {
     console.log('Clicked')
   }
+  const infoFromChild = (e)=>{
+    // const list = {
+    //   all : true,
+    //   active : false
+    // }
+    setList({  ...activeOnlyList, [e.target.name]: e.target.checked })
+
+    // console.log(e.target.checked)
+
+  }
+  console.log(props)
+  //   const { account, pass, assetdata} = props.data
+  // const activeAssetsList = assetdata.filter( asset=> asset.status === '1')
+  // const allAssetsList = props.data
+
+  console.log('IS THE LIST ACTIVE ONLY ?', activeOnlyList)
+
 
   return (
     <div className='header-appbar'>
@@ -67,5 +122,6 @@ export default function HeaderAppBar(props) {
         <Toolbar />
       </React.Fragment>
     </div>
+
   );
 }

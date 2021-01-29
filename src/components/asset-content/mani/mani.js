@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './mani-main.css';
 import GpsFixedIcon from '@material-ui/icons/GpsFixed';
 import Tablet from './tablet/tablet';
+import PhonelinkEraseIcon from '@material-ui/icons/PhonelinkErase';
+import GpsOffIcon from '@material-ui/icons/GpsOff';
 import GPS from './gps/gps';
 import Location from './location/location';
 import Accordion from '@material-ui/core/Accordion';
@@ -33,48 +35,10 @@ export default class Mani extends Component {
 		this.setState({ displayIt : true })
 	}
 
-	// async fetchManiData() {
 
-	// 	// console.log('fetching MANI')
-	// 	const { assetInfo : { id=null, gps=null }} = this.state
-
-	// 	if (gps === null){
-	// 		console.log('This asset has no GPSID')
-	// 	}else{
-	// 		let bodyData = {
-	// 		'params': {
-	// 			'id': id,
-	// 			'gpsid': gps
-	// 			}}
-	// 		const makeRequest = await fetch('/mani', {
-	// 	        method: 'POST',
-	// 	        body: JSON.stringify(bodyData),
-	// 	        headers: {'Content-Type': 'application/json'}
-	// 	    })
-	// 	    console.log('End',makeRequest)
-	// 		const getManiData = await makeRequest.json()
-	// 		console.log(getManiData)
-
-
-	// 		if (makeRequest.status === 200) {
-	// 			if (getManiData.error) {
-	// 				console.log('Error in server bud')
-	// 				this.setState({maniexists : false})
-	// 			}else{
-	// 				if (getManiData) {
-	// 					this.setState({tabletMani : getManiData.maniresponse})
-	// 					console.log(getManiData)
-	// 				}else{
-	// 					this.setState({maniexists : false})
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	return 'Done'
-	// }
 	render(){
-		// console.log(this)
-		const { assetInfo : { id=null, gps=null }, displayIt} = this.state
+		console.log('@@@@@@@@@@@@@@@@@@@',this)
+		const { assetInfo : { id=null, gps=null, account, hashed }, displayIt} = this.state
 		console.log(`asset id : ${id}, gpsid : ${gps}`)
 		// console.log(this)
 		return(
@@ -90,19 +54,19 @@ export default class Mani extends Component {
 			          
 			          > 
 			            <div className='column'>
-			              <TabletAndroidIcon />
+			              { gps === null ? <PhonelinkEraseIcon /> : <TabletAndroidIcon />}
 			            </div>
 			            <div className='column'>
-			              <GpsFixedIcon/>
+			              {gps === null ? <GpsOffIcon/> : <GpsFixedIcon/> }
 			            </div>
 			          </AccordionSummary>
 
 			          <AccordionDetails>
 			            <div className='column left-helper'>
-			            	<Tablet data={{'id':id,'gpsid':gps}}/>
+			            	<Tablet data={{'id':id,'gpsid':gps,'account': account, 'hashed': hashed}}/>
 			            </div>
 			            <div className='column left-helper'>
-			              <GPS data={{'id':id,'gpsid':gps}}/>
+			              <GPS data={{'id':id,'gpsid':gps,'account': account, 'hashed': hashed}}/>
 			            </div>
 			            <div className='column helper'>
 			              <Typography variant="caption"> Select your destination of choice <br />
@@ -110,9 +74,8 @@ export default class Mani extends Component {
 			              </Typography> 
 			              <br/>
 			            
-			              <Location data={{'id':id,'gpsid':gps}}/>
+			              <Location data={{'id':id,'gpsid':gps,'account': account, 'hashed': hashed}}/>
 			            </div>
-
 			          </AccordionDetails>
 
 			          <Divider />

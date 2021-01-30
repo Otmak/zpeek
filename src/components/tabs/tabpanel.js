@@ -31,6 +31,7 @@ export default class SolidTab extends Component {
 
   componentDidMount(){
     this.setState({loading : false})
+    // console.log(this)
 
   }
 
@@ -39,7 +40,20 @@ export default class SolidTab extends Component {
 
   }
 
+  componentDidUpdate(){
+    console.log('This is updated',this)
+  }
+
   parseNTimes(n) {
+    // const func = ()=>{
+    //   let avail = this
+    //   console.log(avail)
+    // }
+    // const checker = setInterval(func, 2000)
+    // const kill = setTimeout(()=>{
+    //   clearTimeout(checker)
+    // }, 10000)
+
     const elemArr = []
     for ( let i = 0; i < n; i++) {
       elemArr.push(<TabSkeleton key={i} />)

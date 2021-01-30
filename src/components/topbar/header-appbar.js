@@ -78,7 +78,10 @@ export default function HeaderAppBar(props) {
   //   setColor(event.target.checked ? 'blue' : 'default');
   // };
   const handleOpen = ()=> {
-    console.log('Clicked')
+    console.log('Logout click', window)
+    localStorage.clear();
+    window.location.reload()
+    // localStorage.clear();
   }
   const infoFromChild = (e)=>{
     // const list = {

@@ -35,7 +35,7 @@ export default class AppContainer extends Component {
   	const { data } = this.state
   	  return (
 	    <div>
-	      <HeaderAppBar assets={this.props.assets}/> 
+	      <HeaderAppBar assets={this.props.assetdata}/> 
 	      <SolidTab data={data}> </SolidTab>
 	   </div>  
   )}

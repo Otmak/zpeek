@@ -17,7 +17,7 @@ export default class AssetContainer extends Component {
 	}
 
 	render(){
-		console.log('****************',this)
+		// console.log('****************',this)
 		const {gpsid, id, account, hashed} = this.state.data
 		return(
 			<div className='asset-content-container'>

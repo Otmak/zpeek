@@ -14,26 +14,40 @@ export default class App extends Component {
   super()
   this.state = {
     assets: [],
-    searchFeild: '',
+    wasAlreadyHere: false,
     viewBothActiveAndInactive : false,
-    weGot200 : false
-    // accountCode : '',
-    // password : ''
+    weGot200 : false,
+    accountCode : localStorage.getItem('entryCardAccount'), 
+    passWord : localStorage.getItem('entryCardHash')
    }
   }
 
   componentDidMount() {
+    // localStorage.clear();
+    console.log('MOUNTED!=======>', this)
      this._isMounted = true;
-     const VIP = localStorage.getItem('alreadyHere')
-     if (  VIP ) {
-      this.setState({ weGot200 : true})
+     const { accountCode, passWord } = this.state
+     const validate = (v) =>  v === '' || v === undefined || v === null ? false : true 
+     // console.log('test', false && false)
+     console.log('Component mounted =>' ,`account code : ${accountCode}, hash: ${passWord} `)
 
-     }
+     if (validate(accountCode) && validate(passWord)){
+      this.letsGetStarted()
+      this.setState({wasAlreadyHere : true})
+        }else{
+          console.log('The data is null', this)
+          return;
+        }
   }
 
 
     componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  componentDidUpdate(){
+    console.log('UPDATED', this)
+
   }
 
 
@@ -49,27 +63,20 @@ export default class App extends Component {
   }
 
 
-  async letsGetStarted(e){
-    e.preventDefault()
-    const validate = (v) =>  v === '' || v === undefined ? false : true 
-
-      // if (v === '' || v === undefined) {
-      //   // console.log('Your params are weak bruh')
-      //   return false
-      // }else{
-      //   return true
-
-      // }
-      
-    
+  async letsGetStarted(){
     const {accountCode, passWord} = this.state
-    // console.log(validate(accountCode) === validate(passWord), validate(accountCode), validate(passWord))
+    console.log('Submiting..' ,`account code : ${accountCode}, hash: ${passWord} `)
+    const validate = (v) =>  v === '' || v === undefined || v === null ? false : true 
+
     if ( validate(accountCode) && validate(passWord)) {
       // console.log(`Account : ${accountCode}  password ${passWord}`)
       const bodyData = {
         'account' : accountCode,
         'hashed' : passWord
       }
+      localStorage.setItem('entryCardAccount', accountCode)
+      localStorage.setItem('entryCardHash', passWord)
+
 
       const makeRequest = await fetch('/assets', {
           method: 'POST',
@@ -78,10 +85,9 @@ export default class App extends Component {
       })
 
       const getInitialData = await makeRequest.json()
-      console.log(makeRequest.status)
       if ( makeRequest.status === 200 && !getInitialData.error) {//this._isMounted
         console.log(getInitialData)
-        this.setState({ weGot200 : true, assets : getInitialData})
+        this.setState({ assets : getInitialData, weGot200 : true, wasAlreadyHere : false})
         
       }else {
         console.log('ERROR:',getInitialData)
@@ -95,7 +101,7 @@ export default class App extends Component {
 
   
   render() {
-    const {assets, accountCode, passWord, weGot200 } = this.state
+    const {assets, accountCode, passWord, weGot200, wasAlreadyHere } = this.state
     // const assetListLenghth = assets.length
     // const activeAssetsList = assets.filter( asset=> asset.status == '1')
     console.log(`Is it 200? ${weGot200}`)
@@ -108,11 +114,12 @@ export default class App extends Component {
     //         <AppContainer data={{'account': accountCode, 'pass':passWord }}/>
     //       </div>
     //   )} 
-
+        // { wasAlreadyHere &&  <AppContainer data={{'assetdata': assets }}/>}
     return (
       <div className='App'>
-        { weGot200 && <AppContainer data={{'account': accountCode, 'hashed':passWord, 'assetdata': assets }}/>}
-        { !weGot200 && <SignInFirst getFormData={(e)=>this.getGettingStartedData(e)} letsGetStarted={(e)=>this.letsGetStarted(e)}/>}
+        { weGot200 &&  <AppContainer data={{'account': accountCode, 'hashed':passWord, 'assetdata': assets }}/>}
+        { wasAlreadyHere &&  <AppContainer data={{'assetdata': assets }} /> }
+        { !weGot200 && ! wasAlreadyHere ? <SignInFirst getFormData={(e)=>this.getGettingStartedData(e)} letsGetStarted={()=>this.letsGetStarted()}/>:''}
       </div>
   )}
 }

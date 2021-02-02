@@ -8,6 +8,8 @@ application = Flask(__name__)
 password = 'PartyLikeIts.1999'
 # account = 'KRA5602'
 
+print('API is now Online..!')
+
 
 def makeAPIRequest():
     ''' User in any route to make api call detect errors with API call and maybe send email about error'''
@@ -373,4 +375,4 @@ def test():
 
 
 if __name__ == '__main__':
-    application.run(debug=True)
+    application.run(use_reloader=True, port=6000, debug=True)

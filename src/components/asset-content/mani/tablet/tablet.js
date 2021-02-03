@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './tablet.css';
 import Badge from '@material-ui/core/Badge';
 import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
@@ -35,6 +36,7 @@ export default class Tablet extends Component {
 
   hoverAction(arg){
   	console.log('hover',arg)
+
   }
 
 

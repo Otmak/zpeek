@@ -14,6 +14,7 @@ import AccordionActions from '@material-ui/core/AccordionActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 
@@ -54,12 +55,37 @@ export default class Mani extends Component {
 			          
 			          > 
 			            <div className='column'>
-			              { gps === null ? <PhonelinkEraseIcon /> : <TabletAndroidIcon />}
+			              { 
+			              	gps === null ? 
+			              	<Tooltip title='This has NO GPSID' arrow> 
+			              		<PhonelinkEraseIcon />
+			              	</Tooltip>
+			              			 : 
+			              	<Tooltip title='Has GPSID' arrow>
+			              			<TabletAndroidIcon />
+			              	</Tooltip>
+
+			              }
 			            </div>
+
 			            <div className='column'>
-			              {gps === null ? <GpsOffIcon/> : <GpsFixedIcon/> }
+			            
+
+			              {
+			              	gps === null ? 
+							<Tooltip title='This has NO GPSID' arrow>
+			              		<GpsOffIcon/>
+			              	</Tooltip>
+			              	 : 
+			              	<Tooltip title='Has GPSID' arrow>
+			              		<GpsFixedIcon/>
+			              	</Tooltip>
+			             }
+			             
 			            </div>
 			          </AccordionSummary>
+
+			          <Divider />
 
 			          <AccordionDetails>
 			            <div className='column left-helper'>

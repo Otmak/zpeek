@@ -153,6 +153,9 @@ export default class GPS extends Component {
 						</Grid>
 	  			 	)
 	  			})}
+	  			  <div className=''>
+			        <Button onClick={()=> this.fetchGpsData()} color="primary">Get GPS</Button>
+			      </div>
   				</div>
   			)
   		}

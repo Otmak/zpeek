@@ -3,6 +3,7 @@ import './header-appbar.css';
 import TestT from './test-t';
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
+import Fab from '@material-ui/core/Fab';
 import MenuIcon from '@material-ui/icons/Menu';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -13,6 +14,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import AppContainer from '../app-container/app-container';
+import Tooltip from '@material-ui/core/Tooltip';
+import SwapHorizRoundedIcon from '@material-ui/icons/SwapHorizRounded';
 
 
 const drawerWidth = 240;
@@ -61,6 +64,7 @@ export default function HeaderAppBar(props) {
   // console.log('PROPS INSIDE APPBARContainer COMP:' ,props)
   // const [color, setColor] = React.useState('default');
   const [open, setOpen] = useState(false);
+  const [readySwapping, setreadySwapping] = useState(false);
   const [activeOnlyList, setList] = useState({activeOnly : false});
 
   const classes = useStyles();
@@ -71,9 +75,12 @@ export default function HeaderAppBar(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const areWeReadyToSwap = () =>{
+    setreadySwapping(true);
+  }
 
 
-  const appBarStyle = { background: 'linear-gradient(90deg, #4598DC, #B06AB3 )'}
+  const appBarStyle = { background: 'linear-gradient(90deg, #4598DC, #B06AB3 )', bottom : 0 , top :'auto', zIndex: 9999999}
   // const handleChange = (event) => {
   //   setColor(event.target.checked ? 'blue' : 'default');
   // };
@@ -107,18 +114,29 @@ export default function HeaderAppBar(props) {
         <ElevationScroll>
           <AppBar style={appBarStyle}>
             <Toolbar>
+            {
+              readySwapping ?
+              <input type='text' placeholder='Enter account code'/>
+
+              :
+              <Tooltip title='Click to Switch accounts' onClick={areWeReadyToSwap}>
+                <Fab color='primary' aria-label='switch accounts'>
+                  <SwapHorizRoundedIcon/>
+                </Fab>
+              </Tooltip>
+            }
             <div className='thebetween'/>
             <div >
-                <IconButton
-                  aria-label="show more"
-                  aria-controls={'primary-search-account-menu-mobile'}
-                  aria-haspopup="true"
-                  onClick={handleOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-              </div>
+              <IconButton
+                aria-label="show more"
+                aria-controls={'primary-search-account-menu-mobile'}
+                aria-haspopup="true"
+                onClick={handleOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
             </Toolbar>
           </AppBar>
         </ElevationScroll>

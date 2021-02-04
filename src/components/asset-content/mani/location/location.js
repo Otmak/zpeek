@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import './location.css';
 
 
@@ -67,7 +69,7 @@ export default class Location extends Component{
 					console.log('Error in server ',getLocationData.error )
 					this.setState({isLocationLoading : false})
 				}else{
-					if (getLocationData && isComponentMounted) {
+					if (getLocationData && isComponentMounted && this._isMounted) {
 						console.log('Location on the way!')
 						this.setState({locationDetails : getLocationData.locationresponse, isLocationLoading : false})
 						// console.log(getLocationData)
@@ -90,12 +92,15 @@ export default class Location extends Component{
 
 		const {locationDetails, isLocationLoading} = this.state
 		const functionn = ()=> this.fetchManiData()
-		console.log(locationDetails)
+		console.log('LOCATION:',this)
 		return(
 			<div>
 				{ isLocationLoading && <span> Loading..... </span> }
 				{!isLocationLoading &&
-					<div> {locationDetails.power === 'on' ? <Chip className='chip-on' label='On' onClick={functionn} /> : <Chip className='chip-off' label='Off'/> }</div>
+					<div> 
+
+						{locationDetails.power === 'on' ? <Chip className='chip-on' label='On' onClick={functionn} /> : <Chip className='chip-off' label='Off'/> }
+					</div>
 				}
 			</div>
 		)}

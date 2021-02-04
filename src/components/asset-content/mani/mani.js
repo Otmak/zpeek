@@ -48,7 +48,7 @@ export default class Mani extends Component {
 				<div className='mani-holder-container'>
 					<Accordion className='main-asset-data-panel' key={id} defaultExpanded>
 			          <AccordionSummary
-			            expandIcon={<ExpandMoreIcon />}
+			            expandIcon={<ExpandMoreIcon key={id} />}
 			            aria-controls="panel1c-content"
 			            id="panel1c-header"
 			            className='left-helper'
@@ -64,13 +64,9 @@ export default class Mani extends Component {
 			              	<Tooltip title='Has GPSID' arrow>
 			              			<TabletAndroidIcon />
 			              	</Tooltip>
-
 			              }
 			            </div>
-
 			            <div className='column'>
-			            
-
 			              {
 			              	gps === null ? 
 							<Tooltip title='This has NO GPSID' arrow>
@@ -94,12 +90,7 @@ export default class Mani extends Component {
 			            <div className='column left-helper'>
 			              <GPS data={{'id':id,'gpsid':gps,'account': account, 'hashed': hashed}}/>
 			            </div>
-			            <div className='column helper'>
-			              <Typography variant="caption"> Select your destination of choice <br />
-			                <a href="#secondary-heading-and-columns" > Learn more</a>
-			              </Typography> 
-			              <br/>
-			            
+			            <div className='column helper'>			            
 			              <Location data={{'id':id,'gpsid':gps,'account': account, 'hashed': hashed}}/>
 			            </div>
 			          </AccordionDetails>

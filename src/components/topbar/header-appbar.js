@@ -80,7 +80,8 @@ export default function HeaderAppBar(props) {
   }
 
 
-  const appBarStyle = { background: 'linear-gradient(90deg, #4598DC, #B06AB3 )', bottom : 0 , top :'auto', zIndex: 9999999}
+  const appBarStyle = { background: 'linear-gradient(90deg, #4598DC, #B06AB3 )'}
+  const swtich = {background: 'linear-gradient(45deg, #4598DC, #B06AB3 )'}
   // const handleChange = (event) => {
   //   setColor(event.target.checked ? 'blue' : 'default');
   // };
@@ -114,18 +115,6 @@ export default function HeaderAppBar(props) {
         <ElevationScroll>
           <AppBar style={appBarStyle}>
             <Toolbar>
-            {
-              readySwapping ?
-              <input type='text' placeholder='Enter account code'/>
-
-              :
-              <Tooltip title='Click to Switch accounts' onClick={areWeReadyToSwap}>
-                <Fab color='primary' aria-label='switch accounts'>
-                  <SwapHorizRoundedIcon/>
-                </Fab>
-              </Tooltip>
-            }
-            <div className='thebetween'/>
             <div >
               <IconButton
                 aria-label="show more"
@@ -137,6 +126,19 @@ export default function HeaderAppBar(props) {
                 <MoreIcon />
               </IconButton>
             </div>
+            <div className='thebetween'/>
+            {
+              readySwapping ?
+              <input type='text' placeholder='Enter account code'/>
+
+              :
+              <Tooltip title='Click to Switch accounts' onClick={areWeReadyToSwap}>
+                <Fab color='primary' aria-label='switch accounts' style={swtich}>
+                  <SwapHorizRoundedIcon/>
+                </Fab>
+              </Tooltip>
+            }
+
             </Toolbar>
           </AppBar>
         </ElevationScroll>

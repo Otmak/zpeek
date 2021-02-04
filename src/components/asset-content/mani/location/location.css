@@ -7,3 +7,11 @@ div .chip-off {
 	background-color: red;
 	color: #fff;
 }
+
+.tablet-grid {
+	margin: 0.6em;
+}
+
+.tablet-grid:hover {
+	background-color: #bdbdbd59;
+}

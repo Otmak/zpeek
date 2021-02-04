@@ -2,12 +2,24 @@ import React, {Component} from 'react';
 import './tablet.css';
 import Badge from '@material-ui/core/Badge';
 import Chip from '@material-ui/core/Chip';
+// import CustomizedTooltips from './Apptooltip/Apptooltip';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
+
+const HtmlTooltip = theme => ({
+  tooltip: {
+    background: '#f5f5f9',
+    border: '1px solid #dadde9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth : 220,
+  },
+});
 
 
 export default class Tablet extends Component {
@@ -34,12 +46,6 @@ export default class Tablet extends Component {
   }
 
 
-  hoverAction(arg){
-  	console.log('hover',arg)
-
-  }
-
-
   async fetchManiData() {
 
 	console.log('getting ready for tablet mani...')
@@ -60,9 +66,9 @@ export default class Tablet extends Component {
 			'account': account, 
 			'hashed': hashed
 			}}
-		console.log('Seeting State GetMani to TRUE')
+		// console.log('Seeting State GetMani to TRUE')
 		this.setState({gettingMani : true})
-		console.log(' State cleared, fetching tablet mani...')
+		// console.log(' State cleared, fetching tablet mani...')
 
 		const makeRequest = await fetch('/mani', {
 	        method: 'POST',
@@ -100,11 +106,11 @@ export default class Tablet extends Component {
 	validateData (){
 
   		const {tabletMani : {assetInfo, packageManifest, firmware}, gettingMani} = this.state
-  		console.log('from tablet',packageManifest)
-  		console.log('LOODING..', gettingMani)
+  		// console.log('from tablet',packageManifest)
+  		// console.log('LOODING..', gettingMani)
   		if (packageManifest === undefined) {
 
-  			console.log('Getting MANI?', gettingMani)
+  			// console.log('Getting MANI?', gettingMani)
   			return (
   					<div>
   						{gettingMani && <span> Loading... </span>}
@@ -133,7 +139,31 @@ export default class Tablet extends Component {
   					'id':'tagNumber'
   				}]
   			// this.setState({gettingMani : false})
-  			console.log('Still getting MANI?', gettingMani)
+  			const useStylesBootstrap = makeStyles((theme) => ({
+				  arrow: {
+				    color: theme.palette.common.black,
+				  },
+				  tooltip: {
+				    backgroundColor: theme.palette.common.black,
+				  },
+				}));
+
+			function BootstrapTooltip(props) {
+			  const classes = useStylesBootstrap();
+
+			  return <Tooltip arrow classes={classes} {...props} />;
+			}
+  			// console.log('Still getting MANI?', gettingMani)
+  			const HtmlTooltip = withStyles((theme) => ({
+			    tooltip: {
+				backgroundColor: '#fff',//#f5f5f9
+				color: 'rgba(0, 0, 0, 0.87)',
+				maxWidth: 220,
+				fontSize: theme.typography.pxToRem(12),
+				border: '0.1px solid #c7cfffd1',
+				borderRadius :10,
+			  },
+			}))(Tooltip);
   			return (
   				<div className='tablet-div-container'>
 			      <div className=''>
@@ -175,16 +205,33 @@ export default class Tablet extends Component {
 			        <div> Apps : 
 			          {
 			          	packageManifest.apps.map( i=>{
+			          		// const { classes } = this.props
+			          		// console.log(HtmlTooltip)
 			          		return (
-			          			<Badge badgeContent={i.order}  key={i.zonarAppId}>
-	  		          		      <Chip
-	  						        label={i.label}
-	  						        clickable
-	  						        color="primary"
-	  						        variant="outlined"
-	  						        onMouseOver={()=>this.hoverAction(i)}
-	  						      />
-	  						    </Badge>
+			          			<HtmlTooltip 
+			          				key={i.label} 
+			          				title={
+			          					<div>
+								            <Typography color="inherit">{i.label}</Typography>
+								 			<Typography variant="caption">{'order :'}</Typography>  <b>{i.order}</b>.{' '} <br/>
+								 			<Typography variant="caption">{'Version :'}</Typography>  <b>{i.availableVersionCode}</b>.{' '} <br/>
+								            <Typography variant="caption">{'device App Id :'}</Typography>  <b>{i.deviceAppId}</b>.{' '} <br/>
+								            <Typography variant="caption">{'On Home Screen :'}</Typography>  <b>{i.includeOnHomeScreen? 'YES' : 'NO'}</b>.{' '} <br/>
+								            <Typography variant="caption">{'zonar App Id :'}</Typography>  <b>{i.zonarAppId}</b>.{' '} <br/>
+								            <Typography variant="caption">{'APK bRL :'}</Typography>  <u>{'amazing content'}</u>.{' '} <br/>
+								            <Typography>{'package Name :'}</Typography>  <u>{i.packageName}</u>.{' '} <br/>
+							         	</div>		          				
+			          					}
+			          			>
+				          			<Badge badgeContent={i.order}  key={i.zonarAppId}>
+		  		          		      <Chip
+		  						        label={i.label}
+		  						        clickable
+		  						        color="primary"
+		  						        variant="outlined"
+		  						      />
+		  						    </Badge>
+	  						    </HtmlTooltip>
   				          	)})
 			          }
 			        </div>
@@ -197,6 +244,7 @@ export default class Tablet extends Component {
   	}
 
   render(){
+  	// console.log('TABLET',this)
   	const {gettingMani} = this.state
   	// console.log(this)
 	return (

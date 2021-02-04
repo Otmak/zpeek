@@ -4,8 +4,8 @@ import requests
 
 # https://omi.zonarsystems.net/interface.php?customer=hol3292&username=zonar&password=PartyLikeIts.1999&action=showposition&operation=path&reqtype=dbid&target=194&version=2&starttime=1603971032&endtime=1608230858&logvers=3.8&format=json
 application = Flask(__name__)
-# passwd = 'PartyLikeIts.1999'
-password = 'PartyLikeIts.1999'
+# passwd = 'carnival.2044'
+password = 'carnival.2044'
 # account = 'KRA5602'
 
 print('API is now Online..!')
@@ -42,31 +42,28 @@ def get_assets():
         res = requests.get(url)
         if res.status_code == 200:
             print('AUTH SUCSESS')
+            myArray = []
+            bigData = {}
+            getData = ET.fromstring(res.content)
+            data = getData.findall('asset')
+
+            for i in data:
+                # print( i.find('gps').text )
+                myObj = {
+                    'assetgpsid': f"{i.find('fleet').text}-{i.find('gps').text}",
+                    'key': int(i.get('id')),
+                    'gpsid': i.find('gps').text,
+                    'assetNumber': i.find('fleet').text,
+                    'status': i.find('status').text,
+                    'type': i.find('type').text
+                }
+                myArray.append(myObj)
+            return jsonify(myArray)
         else:
             print('******ATTENTION*******  AUTH FAILED')
             print(f'ERROR : {str(res.content.decode("utf-8"))}')
-        myArray = []
-        bigData = {}
-        getData = ET.fromstring(res.content)
-        data = getData.findall('asset')
-
-        for i in data:
-            # print( i.find('gps').text )
-            myObj = {
-                'assetgpsid': f"{i.find('fleet').text}-{i.find('gps').text}",
-                'key': int(i.get('id')),
-                'gpsid': i.find('gps').text,
-                'assetNumber': i.find('fleet').text,
-                'status': i.find('status').text,
-                'type': i.find('type').text
-            }
-            myArray.append(myObj)
-
-        # print(myArray)
-
-
+            return { 'error' : 'Error'}
         # add some checking and validation to prevent errors
-        return jsonify(myArray)
     except:
         print('There is an Error in main')
     return {'error' : 'some Error in Server'}

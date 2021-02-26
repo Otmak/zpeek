@@ -79,8 +79,8 @@ export default class Location extends Component{
 					}
 				}
 			}else{
-				// console.log(`Error AFTER 200 status on fetch or Component is unmounted... COMP mounted?==>${isComponentMounted}`)
-				this.setSate({gettingMani: false})
+				console.log(`Error AFTER 200 status on fetch or Component is unmounted... COMP mounted?==>${this._isMounted}`)
+				// this.setSate({gettingMani: false})
 				return;
 			}
 		}

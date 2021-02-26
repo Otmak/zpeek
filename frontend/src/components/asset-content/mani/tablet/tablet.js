@@ -209,17 +209,16 @@ export default class Tablet extends Component {
 			          		// console.log(HtmlTooltip)
 			          		return (
 			          			<HtmlTooltip 
-			          				key={i.label} 
+			          				key={i.zonarAppId === null ? i.order : i.zonarAppId} 
 			          				title={
 			          					<div>
 								            <Typography color="inherit">{i.label}</Typography>
-								 			<Typography variant="caption">{'order :'}</Typography>  <b>{i.order}</b>.{' '} <br/>
-								 			<Typography variant="caption">{'Version :'}</Typography>  <b>{i.availableVersionCode}</b>.{' '} <br/>
-								            <Typography variant="caption">{'device App Id :'}</Typography>  <b>{i.deviceAppId}</b>.{' '} <br/>
-								            <Typography variant="caption">{'On Home Screen :'}</Typography>  <b>{i.includeOnHomeScreen? 'YES' : 'NO'}</b>.{' '} <br/>
-								            <Typography variant="caption">{'zonar App Id :'}</Typography>  <b>{i.zonarAppId}</b>.{' '} <br/>
-								            <Typography variant="caption">{'APK bRL :'}</Typography>  <u>{'amazing content'}</u>.{' '} <br/>
-								            <Typography>{'package Name :'}</Typography>  <u>{i.packageName}</u>.{' '} <br/>
+								 			<Typography variant="caption">{'Order :'}</Typography>  <b>{i.order}</b><br/>
+								 			<Typography variant="caption">{'Version :'}</Typography>  <b>{i.availableVersionCode}</b>{' '} <br/>
+								            <Typography variant="caption">{'Device App Id :'}</Typography>  <b>{i.deviceAppId}</b>{' '} <br/>
+								            <Typography variant="caption">{'On Home Screen :'}</Typography>  <b>{i.includeOnHomeScreen? 'YES' : 'NO'}</b>{' '} <br/>
+								            <Typography variant="caption">{'Zonar App Id :'}</Typography>  <b>{i.zonarAppId}</b>{' '} <br/>
+								            <Typography variant="caption">{'APK URL :'}</Typography>  <b style={{color: 'green'}}>{i.apkUrl === null ? '-' : 'Available'}</b>{' '} <br/>
 							         	</div>		          				
 			          					}
 			          			>

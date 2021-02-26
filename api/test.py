@@ -366,10 +366,10 @@ def gendata():
 def test():
     try:
         if True:
-            return 'Test is working'
+            return '<h1> YOUR TEST HAS PASSED! </h1>'
     except:
         return 'somn wrong bruh :|'
 
 
 if __name__ == '__main__':
-    application.run(use_reloader=True, port=6000, debug=True)
+    application.run(use_reloader=True, host='0.0.0.0', debug=True)

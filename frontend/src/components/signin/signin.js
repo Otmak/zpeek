@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: '#fff',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -77,11 +77,10 @@ export default function SignInFirst(props) {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+
+            👀
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+  
           <div className={classes.form} noValidate>
             <TextField
               variant="outlined"
@@ -119,20 +118,9 @@ export default function SignInFirst(props) {
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              Peek-A-Boo
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+  
             <Box mt={5}>
               <Copyright />
             </Box>

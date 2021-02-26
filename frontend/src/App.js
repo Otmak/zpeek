@@ -84,8 +84,11 @@ export default class App extends Component {
           headers: {'Content-Type': 'application/json'}
       })
 
+
+
       const getInitialData = await makeRequest.json()
       if ( makeRequest.status === 200 && !getInitialData.error) {//this._isMounted
+        console.log('********************Call is finished****************')
         console.log(getInitialData)
         this.setState({ assets : getInitialData, weGot200 : true, wasAlreadyHere : false})
         
@@ -105,7 +108,7 @@ export default class App extends Component {
     // const assetListLenghth = assets.length
     // const activeAssetsList = assets.filter( asset=> asset.status == '1')
     console.log(`Is it 200? ${weGot200}`)
-    console.log(this)
+    console.log('Checking if assets are empty===>>', assets)
 
 
     // if ( weGot200 ) {
@@ -119,7 +122,7 @@ export default class App extends Component {
       <div className='App'>
         { weGot200 &&  <AppContainer data={{'account': accountCode, 'hashed':passWord, 'assetdata': assets }}/>}
         { wasAlreadyHere &&  <AppContainer data={{'assetdata': assets }} /> }
-        { !weGot200 && ! wasAlreadyHere ? <SignInFirst getFormData={(e)=>this.getGettingStartedData(e)} letsGetStarted={()=>this.letsGetStarted()}/>:''}
+        { !weGot200 && !wasAlreadyHere ? <SignInFirst getFormData={(e)=>this.getGettingStartedData(e)} letsGetStarted={()=>this.letsGetStarted()}/>:''}
       </div>
   )}
 }

@@ -68,8 +68,8 @@ export default class GPS extends Component {
 				this.setState({gpsData : getGpsData.gpsdata})
 			}
 		}else{
-			// console.log(`Error after 200 or comp unmounted. is COMP mouted? ====> ${isComponentMounted}`)
-			this.setSate({isGPSLoading: false})
+				console.log(`Error AFTER 200 status on fetch or Component is unmounted... COMP mounted?==>${this._isMounted}`)
+				return;
 		}
 	}
 	return 'Done'

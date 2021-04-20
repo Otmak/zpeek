@@ -2,14 +2,14 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "client",
-      "image": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APPLICATION_NAME}-client",
+      "name": "frontend",
+      "image": "761937446433.dkr.ecr.us-west-2.amazonaws.com/zapi",
       "hostname": "client",
       "essential": false,
     },
     {
       "name": "api",
-      "image": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APPLICATION_NAME}-api",
+      "image": "761937446433.dkr.ecr.us-west-2.amazonaws.com/zapi",
       "hostname": "api",
       "essential": true,
     },

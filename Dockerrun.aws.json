@@ -13,6 +13,5 @@
       "hostname": "api",
       "essential": true,
     },
-
   ]
 }

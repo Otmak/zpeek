@@ -9,7 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import DateTimePicker from '../datetime/datetime-picker'
+import DateTimePicker from '../datetime/datetime-picker';
+// import DateTimePicker from '../datetime/datetime-picker';
 
 //add tooltip to help explain some functions
 export default class Path extends Component {
@@ -150,7 +151,7 @@ export default class Path extends Component {
 
 		return (
 			<React.Fragment>
-				<DateTimePicker className='date-time-picker' label='Get Path' getsdate={ (e) => this.getDateTime(e)} getedate={ (e) => this.getDateTime(e)}/>
+				<DateTimePicker className='date-time-picker' getdata={ ()=> this.fetchPathData()} label='Get Path' getsdate={ (e) => this.getDateTime(e)} getedate={ (e) => this.getDateTime(e)}/>
 				   { 
 				   		<TableContainer component={Paper}>
    	   				      <Table className="classes.table" aria-label="simple table">

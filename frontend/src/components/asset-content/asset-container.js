@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './asset-content-container.css';
-import Path from './path';
+import Path from './path/path';
 import GendataPathdata from './gendata-pathdata.js';
 import Gendata from './gendata/gendata';
 import Mani from './mani/mani';// Header-for asset info
@@ -17,7 +17,7 @@ export default function AssetContainer (props){
 				<Mani data={{'id':id, 'gps':gpsid,'account': account, 'hashed': hashed}}/>
 			</div>
 			<div className='big-boys-container'>
-				spy
+				<Path/>
 			</div>
 		</div>
 	)

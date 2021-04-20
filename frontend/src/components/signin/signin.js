@@ -76,6 +76,7 @@ export default function SignInFirst(props) {
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
+         ZPeekv2
           <Avatar className={classes.avatar}>
 
             👀
@@ -118,7 +119,7 @@ export default function SignInFirst(props) {
               color="primary"
               className={classes.submit}
             >
-              Peek-A-Boo
+            P👀k
             </Button>
   
             <Box mt={5}>

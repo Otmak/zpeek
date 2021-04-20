@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import PhoneIcon from '@material-ui/icons/Phone';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Path from './path';
+import Path from './path/path';
 import Gendata from './gendata/gendata';
 import Mani from './mani/mani';// Header-for asset info
 

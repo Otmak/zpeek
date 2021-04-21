@@ -5,13 +5,13 @@
       "name": "frontend",
       "image": "761937446433.dkr.ecr.us-west-2.amazonaws.com/zapi",
       "hostname": "client",
-      "essential": false,
+      "essential": false
     },
     {
       "name": "api",
       "image": "761937446433.dkr.ecr.us-west-2.amazonaws.com/zapi",
       "hostname": "api",
-      "essential": true,
+      "essential": true
     },
   ]
 }

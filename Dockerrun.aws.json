@@ -12,6 +12,6 @@
       "image": "761937446433.dkr.ecr.us-west-2.amazonaws.com/zapi",
       "hostname": "api",
       "essential": true
-    },
+    }
   ]
 }

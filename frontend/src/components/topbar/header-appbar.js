@@ -7,15 +7,23 @@ import Fab from '@material-ui/core/Fab';
 import MenuIcon from '@material-ui/icons/Menu';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
+import clsx from 'clsx';
 import Toolbar from '@material-ui/core/Toolbar';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
 import CloseIcon from '@material-ui/icons/Close';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import AppContainer from '../app-container/app-container';
 import Tooltip from '@material-ui/core/Tooltip';
 import SwapHorizRoundedIcon from '@material-ui/icons/SwapHorizRounded';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 
 const drawerWidth = 240;
@@ -51,14 +59,6 @@ function ElevationScroll(props) {
   });
 }
 
-// ElevationScroll.propTypes = {
-//   children: PropTypes.element.isRequired,
-//   *
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-   
-//   window: PropTypes.func,
-// };
 
 export default function HeaderAppBar(props) {
   // console.log('PROPS INSIDE APPBARContainer COMP:' ,props)
@@ -66,6 +66,22 @@ export default function HeaderAppBar(props) {
   const [open, setOpen] = useState(false);
   const [readySwapping, setreadySwapping] = useState(false);
   const [activeOnlyList, setList] = useState({activeOnly : false});
+  const [values, setValues] = React.useState({
+    account:'',
+    password: '',
+    accounError :false,
+  });
+
+  // const { enqueueSnackbar } = useSnackbar();
+
+  // const handleClick = () => {
+  //   enqueueSnackbar('I love snacks.');
+  // };
+
+  // const handleClickVariant = (variant) => () => {
+  //   // variant could be success, error, warning, info, or default
+  //   enqueueSnackbar('This is a success message!', { variant });
+  // };
 
   const classes = useStyles();
   const handleDrawerOpen = () => {
@@ -73,10 +89,30 @@ export default function HeaderAppBar(props) {
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setreadySwapping(false);
   };
   const areWeReadyToSwap = () =>{
     setreadySwapping(true);
+  }
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+
+  };
+
+  const handleKeyDown = (e) => {
+    const validate = (v) =>  v.length === 7 && v !== ''? true : false
+    if (e.key === "Enter" ) {
+     // handleClickVariant('success')
+      console.log(values.account)
+      
+     if (validate(values.account)){
+      localStorage.setItem('entryCardAccount', values.account)
+       window.location.reload()
+     }else{
+      console.log("this is sparta!!!!")
+
+     }
+    }
   }
 
 
@@ -85,6 +121,8 @@ export default function HeaderAppBar(props) {
   // const handleChange = (event) => {
   //   setColor(event.target.checked ? 'blue' : 'default');
   // };
+
+
   const handleOpen = ()=> {
     console.log('Logout click', window)
     localStorage.clear();
@@ -97,17 +135,13 @@ export default function HeaderAppBar(props) {
     //   active : false
     // }
     setList({  ...activeOnlyList, [e.target.name]: e.target.checked })
-
     // console.log(e.target.checked)
 
   }
-  console.log(props)
+  console.log(values)
   //   const { account, pass, assetdata} = props.data
   // const activeAssetsList = assetdata.filter( asset=> asset.status === '1')
   // const allAssetsList = props.data
-
-  console.log('IS THE LIST ACTIVE ONLY ?', activeOnlyList)
-
 
   return (
     <div className='header-appbar'>
@@ -123,14 +157,34 @@ export default function HeaderAppBar(props) {
                 onClick={handleOpen}
                 color="inherit"
               >
-                <MoreIcon />
+                <PowerSettingsNewIcon />
               </IconButton>
             </div>
             <div className='thebetween'/>
+            {localStorage.getItem('entryCardAccount')} 
             {
               readySwapping ?
-              <input type='text' placeholder='Enter account code'/>
+                <FormControl className={clsx(classes.margin, classes.textField)} >
+                  <div>
+                    <TextField
+                      
 
+                      id="standard-password-input"
+                      label="Account code*"
+                      type="text"
+                      autoComplete="current-password"
+                      onChange={handleChange('account')}
+                      onKeyDown={handleKeyDown}
+                  
+                    />
+                    <IconButton
+                        aria-label="close button"
+                        onClick={handleDrawerClose}
+                        >
+                        <CloseIcon />
+                    </IconButton>
+                  </div>
+                </FormControl>
               :
               <Tooltip title='Click to Switch accounts' onClick={areWeReadyToSwap}>
                 <Fab color='primary' aria-label='switch accounts' style={swtich}>
@@ -138,13 +192,11 @@ export default function HeaderAppBar(props) {
                 </Fab>
               </Tooltip>
             }
-
             </Toolbar>
           </AppBar>
         </ElevationScroll>
         <Toolbar />
       </React.Fragment>
     </div>
-
   );
 }

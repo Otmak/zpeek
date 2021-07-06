@@ -8,10 +8,19 @@ div .chip-off {
 	color: #fff;
 }
 
-.tablet-grid {
+/*.tablet-grid {
 	margin: 0.6em;
-}
+}*/
 
 .tablet-grid:hover {
+	background-color: #bdbdbd59;
+}
+.gps-grid-container{
+	padding: 0.1em;
+	margin: 0.3em;
+	margin-right: 0.6em;
+}
+
+.gps-grid-container:hover {
 	background-color: #bdbdbd59;
 }

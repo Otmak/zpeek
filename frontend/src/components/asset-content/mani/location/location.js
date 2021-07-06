@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
+import LocalShippingOutlinedIcon from '@material-ui/icons/LocalShippingOutlined';
+import Button from '@material-ui/core/Button';
 import './location.css';
 
 
@@ -19,7 +22,7 @@ export default class Location extends Component{
 
 	componentDidMount(){
 		this._isMounted = true;
-		this.fetchManiData()
+		this.fetchLocationData()
 		this.setState({isComponentMounted : true})
 	}
 
@@ -30,7 +33,7 @@ export default class Location extends Component{
 		this.setState({isComponentMounted : false})
     }
 
-  	async fetchManiData() {
+  	async fetchLocationData() {
 
 		console.log('fetching location...')
 		this.setState({locationDetails : []})
@@ -88,18 +91,119 @@ export default class Location extends Component{
 		return 'Done'
 	}
 
+
+	Locationdataresponse = ()=>{
+		const {locationDetails, data, isLocationLoading} = this.state
+		console.log(locationDetails.length)
+
+  		if (locationDetails.length === 0) {
+  			// console.log('No gps data')
+  			return(
+  				<div>
+  					{ isLocationLoading &&
+  						<div>
+							<Skeleton style={{ height:80 }}/>
+							<Skeleton style={{ height:30 }}/>
+							<Skeleton style={{ height:30 }}/>
+							<Skeleton />
+  						</div> 
+  					}
+	  				{ !isLocationLoading && 
+	  					<div>
+		  					<Typography align='center'>No Location Data </Typography>
+		  					<Button align='right' onClick={()=> this.fetchLocationData()} color="primary">Get Location</Button>
+	  					</div>
+	  				}
+  				</div>
+  				)
+  		}else{
+  			const getGPSDATA = locationDetails[0]
+  			// console.log(getGPSDATA,getGPSDATA[0])
+  			return (
+  				<div>
+	  				<Grid container alignItems="center">
+						<Grid item xs>
+							<Typography gutterBottom variant="subtitle1">
+								VEHICLE POWER
+							</Typography>
+						</Grid>
+			        <Grid item>
+			            <Typography gutterBottom variant="h6">
+			            	{ locationDetails.power === "on" ? <LocalShippingOutlinedIcon style={{ color: "#29d28b" }}/> : <LocalShippingOutlinedIcon style={{ color: "red" }}/>}
+			                { locationDetails.power}
+			            	
+
+			            </Typography>
+			        </Grid>
+				     <br/>
+
+				    </Grid>
+				    <Grid className='gps-grid-container' container alignItems="center">
+						<Grid item xs>
+						  <Typography color="textSecondary" variant="body2">
+						  	SPEED
+						  </Typography>
+						</Grid>			          
+						<Grid item>
+						  <Typography color="textSecondary" variant="body2">
+						  	{ locationDetails.speed }{ locationDetails.sunit}
+						  </Typography>
+						</Grid>
+					</Grid>				    
+
+					<Grid className='gps-grid-container' container alignItems="center">
+						<Grid item xs>
+						  <Typography color="textSecondary" variant="body2">
+						  	TIME
+						  </Typography>
+						</Grid>			          
+						<Grid item>
+						  <Typography color="textSecondary" variant="body2">
+						  	{locationDetails.time}
+						  </Typography>
+						</Grid>
+					</Grid>
+					<Grid className='gps-grid-container' container alignItems="center">
+						<Grid item xs>
+						  <Typography color="textSecondary" variant="body2">
+						  	LAT/LON
+						  </Typography>
+						</Grid>			          
+						<Grid item>
+						  <Typography color="textSecondary" variant="body2">
+						  	{locationDetails.lat}
+						  	{locationDetails.lon}
+						  </Typography>
+						</Grid>
+					</Grid>
+
+	  			  <div className=''>
+			        <Button onClick={()=> this.fetchLocationData()} color="primary">Get Location</Button>
+			      </div>
+  				</div>
+  			)
+  		}
+  	}
+
 	render(){
 
 		const {locationDetails, isLocationLoading} = this.state
-		const functionn = ()=> this.fetchManiData()
+		const functionn = ()=> this.fetchLocationData()
 		console.log('LOCATION:',this)
+
 		return(
 			<div>
-				{ isLocationLoading && <span> Loading..... </span> }
+				{ isLocationLoading &&  
+					<div>
+						<Skeleton style={{ height:80 }}/>
+						<Skeleton />
+						<Skeleton />
+						
+  					</div>  
+  				}
 				{!isLocationLoading &&
-					<div> 
-
-						{locationDetails.power === 'on' ? <Chip className='chip-on' label='On' onClick={functionn} /> : <Chip className='chip-off' label='Off'/> }
+					<div>
+						{this.Locationdataresponse()}
 					</div>
 				}
 			</div>

@@ -17,7 +17,7 @@ export default function AssetContainer (props){
 				<Mani data={{'id':id, 'gps':gpsid,'account': account, 'hashed': hashed}}/>
 			</div>
 			<div className='big-boys-container'>
-				<Path/>
+				<Path data={{'id':id, 'gps':gpsid,'account': account, 'hashed': hashed}}/>
 			</div>
 		</div>
 	)

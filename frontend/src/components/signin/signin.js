@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,10 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
+import Snackbar from '@material-ui/core/Snackbar';
+import Fade from '@material-ui/core/Fade';
+import Slide from '@material-ui/core/Slide';
 
 function Copyright() {
   return (
@@ -59,15 +63,40 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInFirst(props) {
   const classes = useStyles();
-  const letsGetStarted = (e)=>{
-    e.preventDefault()
+  const [state, setState] = React.useState({
+    checkedA: true,
+    shallAll: true,
+    open: false,
+    Transition: Fade,
+  });
 
-    console.log('fetching... your data', e)
+  const handleClick = (Transition) => () => {
+    setState({
+      open: true,
+      Transition,
+    });
+  };
+  const [sub, setSub] = useState(false);
 
-  }
+
+  function SlideTransition(props) {
+  return <Slide {...props} direction="up" />;
+}
 
   const getFormData = (e) => {
     console.log(e.target.name,':',e.target.value)
+  }
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+    localStorage.setItem('showAllAssets', state.shallAll)
+    console.log(state)
+  };
+
+  const letsGetStarted = (e)=>{
+    handleClick(SlideTransition);
+    e.preventDefault()
+    console.log('fetching... your data', e)
+
   }
 
   return (
@@ -79,7 +108,6 @@ export default function SignInFirst(props) {
          ZPeekv2
           <Avatar className={classes.avatar}>
 
-            👀
           </Avatar>
   
           <div className={classes.form} noValidate>
@@ -107,20 +135,36 @@ export default function SignInFirst(props) {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
+            <Switch
+              checked={state.shallAll}
+              onChange={handleChange}
+              color="primary"
+              name="shallAll"
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            /> 
+            { state.shallAll? 'Active only' : 'Both Active/inactive'}
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              onClick={props.letsGetStarted}
+              onClick={() => {
+                props.letsGetStarted();
+              }}
+              onMouseDown={handleClick(SlideTransition)}
               color="primary"
               className={classes.submit}
             >
-            P👀k
+              { console.log('*****submitting.....****',state) }
+              { !sub ? 'P👀k' : 'Wait...'}
             </Button>
+            <Snackbar
+              open={state.open}
+              TransitionComponent={state.Transition}
+              message="Loging in please wait..."
+              key={state.Transition.name}
+            />
   
             <Box mt={5}>
               <Copyright />

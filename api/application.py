@@ -4,9 +4,6 @@ import requests
 
 # https://omi.zonarsystems.net/interface.php?customer=hol3292&username=zonar&password=PartyLikeIts.1999&action=showposition&operation=path&reqtype=dbid&target=194&version=2&starttime=1603971032&endtime=1608230858&logvers=3.8&format=json
 application = Flask(__name__)
-# passwd = 'PartyLikeIts.1999'
-password = 'PartyLikeIts.1999'
-# account = 'KRA5602'
 
 print('API is now Online..!')
 

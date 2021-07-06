@@ -4,9 +4,6 @@ import requests
 
 # https://omi.zonarsystems.net/interface.php?customer=hol3292&username=zonar&password=PartyLikeIts.1999&action=showposition&operation=path&reqtype=dbid&target=194&version=2&starttime=1603971032&endtime=1608230858&logvers=3.8&format=json
 application = Flask(__name__)
-# passwd = 'carnival.2044'
-password = 'carnival.2044'
-# account = 'KRA5602'
 
 print('API is now Online..!')
 
@@ -22,12 +19,13 @@ def toInt(s):
     else:
         return s
 
-
+# HOME INDEX
 @application.route('/')
 def index():
     return 'online'
 
 
+########   ASSETS  #########
 @application.route('/assets', methods=['GET', 'POST'])
 def get_assets():
     try:
@@ -68,7 +66,7 @@ def get_assets():
         print('There is an Error in main')
     return {'error' : 'some Error in Server'}
 
-
+#####   MANI  ##########
 @application.route('/mani', methods=['POST', 'GET'])
 def main():
     try:
@@ -105,6 +103,7 @@ def main():
         return {'error': 'Error making request for Mani'}
 
 
+#############  LOCATION  ##############
 @application.route('/location', methods=['GET', 'POST'])
 def location():
     try:
@@ -156,6 +155,7 @@ def location():
         return {'error': f'Error in MAIN '}
 
 
+######### GPS UNIT ##############
 @application.route('/gpsunit', methods=['GET', 'POST'])
 def gpsunit():
     try:
@@ -207,6 +207,7 @@ def gpsunit():
         return {'error': 'Making your initial request'}
 
 
+###########   PATH   ############
 @application.route('/path', methods=['GET', 'POST'])
 def path():
     try:
@@ -220,13 +221,15 @@ def path():
         if request.method == 'POST':
             print('POST it w ma Brah>>>>>>>', ourData)
             try:
+                print ("******=====>>>>", request.get_json()['params'])
 
                 dataFromClient = request.get_json()['params']
                 start = dataFromClient['stime']
                 end = dataFromClient['etime']
-                dbId = dataFromClient['dbId']
-                account = dataFromClient['account']
-                passwd = dataFromClient['hashed']
+                pathAnchorData = dataFromClient['pathAnchorData']
+                dbId = pathAnchorData['id']
+                account = pathAnchorData['account']
+                passwd = pathAnchorData['hashed']
 
                 print('PARAMS READY!....===> sending ', start, end, dbId, passwd)
 
@@ -272,6 +275,7 @@ def path():
         return {'error ': 'An Error in path happened'}
 
 
+###########  GEN DATA  ############
 @application.route('/gendata', methods=['GET', 'POST'])
 def gendata():
     try:

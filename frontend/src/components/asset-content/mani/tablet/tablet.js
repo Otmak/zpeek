@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 
 const HtmlTooltip = theme => ({
@@ -105,7 +106,7 @@ export default class Tablet extends Component {
 
 	validateData (){
 
-  		const {tabletMani : {assetInfo, packageManifest, firmware}, gettingMani} = this.state
+  		const {tabletMani : {assetInfo, packageManifest, firmware, organization}, gettingMani} = this.state
   		// console.log('from tablet',packageManifest)
   		// console.log('LOODING..', gettingMani)
   		if (packageManifest === undefined) {
@@ -113,13 +114,18 @@ export default class Tablet extends Component {
   			// console.log('Getting MANI?', gettingMani)
   			return (
   					<div>
-  						{gettingMani && <span> Loading... </span>}
+  						{ gettingMani && 
+  							<div>
+  								<Skeleton style={{ height:80 }}/>
+  								<Skeleton />
+  								<Skeleton />
+  							</div>
+  						}
 	  					{ !gettingMani &&
 	  						<div>
 	  						<Typography align='center'>No Manifest Data </Typography>
 	  						<Button align='right' onClick={()=> this.fetchManiData()} color="primary">Get mani</Button>
 	  						</div>
-	  				
 	  					}
   					</div>
   				)
@@ -129,13 +135,13 @@ export default class Tablet extends Component {
   			const tabletType = firmware.buildNumber.split('-')[0] === 'CONNECT'? 'CONNECT' : ''
   			const handleList = [
   				{
-  					'name':'Asset ID',
-  					'id':'assetId'
+  					'name':'ASSET NUMBER',
+  					'id':'assetNumber'
   				}, {
-  					'name':'Ecu Vin',
+  					'name':'ECU VIN',
   					'id':'ecuVin'
   				}, {
-  					'name':'Tag Number',
+  					'name':'TAG NUMBER',
   					'id':'tagNumber'
   				}]
   			// this.setState({gettingMani : false})
@@ -181,6 +187,7 @@ export default class Tablet extends Component {
 			        </Grid>
 			      	{
 			      		handleList.map( i =>{
+			      			console.log( )
 			      			return (
 			      				<Grid className='tablet-grid' key={i.id} container alignItems="center">
 		  				          <Grid item xs>
@@ -191,11 +198,24 @@ export default class Tablet extends Component {
 		  					       <Grid item>
 		  					          <Typography color="textSecondary" variant="body2">
 		  					          	{ assetInfo[i.id]=== null ? '-' : assetInfo[i.id] }
+		  					          	
 		  					       	 </Typography>
 		  					       </Grid>
 		  					    </Grid>
 	  					    )})
 			      	}
+			      				        <Grid className='tablet-grid' container alignItems="center">
+		  				         <Grid item xs>
+		  					          <Typography color="textSecondary" variant="body2">
+		  					          	TIME ZONE
+		  					       	 </Typography>
+		  					       </Grid>			          
+		  					       <Grid item>
+		  					          <Typography color="textSecondary" variant="body2">
+		  					         { 	organization["defaultTimezone"] }
+		  					       	 </Typography>
+		  					       </Grid>
+		  				</Grid>
 			      </div>
 			      <Divider variant="middle" />
 			      <div className=''>
@@ -246,6 +266,7 @@ export default class Tablet extends Component {
   	// console.log('TABLET',this)
   	const {gettingMani} = this.state
   	// console.log(this)
+
 	return (
 		<div>
 			{this.validateData()}

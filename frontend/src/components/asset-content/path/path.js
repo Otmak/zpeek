@@ -14,12 +14,14 @@ import DateTimePicker from '../datetime/datetime-picker';
 
 //add tooltip to help explain some functions
 export default class Path extends Component {
+	_isMounted = false;
 	constructor(props){
 		super(props)
 		this.state = {
-			data :[],
+			data : [],
 			pathexists : true,
-			theId : this.props.data,
+			pathAnchorData : this.props.data,
+			theId : this.props.data.id,
 			startDate: new Date().setHours(0,0,0,0)/1000.0,
 			endDate: new Date().setHours(23,59,0,0)/1000.0,
 			isComponentMounted:true
@@ -27,12 +29,14 @@ export default class Path extends Component {
 	}
 
 	componentDidMount(){
+		this._isMounted = true;
 		// console.log('Mounted')
 		// return this.fetchPathData() WORKS!
 	
 	}
 
 	componentWillUnmount(){
+		this._isMounted = false;
 		this.setState({isComponentMounted : false})
   }
 
@@ -75,14 +79,14 @@ export default class Path extends Component {
 	async fetchPathData ()  {
 		// let start = 1603971032
 		// let end = 1608230858
-		const {theId, startDate, endDate, isComponentMounted} = this.state
+		const {pathAnchorData, theId, startDate, endDate, isComponentMounted} = this.state
 		console.log('Start',this)
 
 		let bodyData = {
 			'params': {
 				'stime': startDate,
 				'etime': endDate,
-				'dbId' : theId 
+				'pathAnchorData' : pathAnchorData 
 					}}
 		const makeRequest = await fetch('/path', {
 	        method: 'POST',
@@ -92,12 +96,12 @@ export default class Path extends Component {
 	    console.log('End',makeRequest)
 		const getPathData = await makeRequest.json()
 		console.log(getPathData)
-		if (makeRequest.status === 200) {
+		if (makeRequest.status === 200 && this._isMounted ) {
 			if (getPathData.error) {
 				console.log('Error in server bud')
 				this.setState({pathexists : false})
 			}else{
-				if (getPathData.pathresponse[0].id == theId && isComponentMounted) {
+				if (getPathData.pathresponse[0].id == theId && this._isMounted) {
 					this.setState({data : getPathData.pathresponse[0].events})
 					console.log(getPathData.pathresponse[0].id, theId)
 				}else{

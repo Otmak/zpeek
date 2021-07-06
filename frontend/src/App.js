@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AppContainer from './components/app-container/app-container';
 import ElevateAppBar from './components/app-container/app-container';
-import SignInFirst from './components/signin/signin'
+import SignInFirst from './components/signin/signin';
 import './App.css';
 
 // add Tooltips all across app
@@ -24,7 +24,7 @@ export default class App extends Component {
 
   componentDidMount() {
     // localStorage.clear();
-    console.log('MOUNTED!=======>', this)
+    console.log('MOUNTED!=======>', localStorage.getItem('showAllAssets'))
      this._isMounted = true;
      const { accountCode, passWord } = this.state
      const validate = (v) =>  v === '' || v === undefined || v === null ? false : true 
@@ -106,9 +106,9 @@ export default class App extends Component {
   render() {
     const {assets, accountCode, passWord, weGot200, wasAlreadyHere } = this.state
     // const assetListLenghth = assets.length
-    // const activeAssetsList = assets.filter( asset=> asset.status == '1')
+    const activeAssetsList = assets.filter( asset=> asset.status == '1')
     console.log(`Is it 200? ${weGot200}`)
-    console.log('Checking if assets are empty===>>', assets)
+    console.log('Checking if assets are empty===>>', assets, localStorage.getItem('showAllAssets'))
 
 
     // if ( weGot200 ) {
@@ -120,8 +120,8 @@ export default class App extends Component {
         // { wasAlreadyHere &&  <AppContainer data={{'assetdata': assets }}/>}
     return (
       <div className='App'>
-        { weGot200 &&  <AppContainer data={{'account': accountCode, 'hashed':passWord, 'assetdata': assets }}/>}
-        { wasAlreadyHere &&  <AppContainer data={{'assetdata': assets }} /> }
+        { weGot200 &&  <AppContainer data={{'account': accountCode, 'hashed':passWord, 'assetdata':  localStorage.getItem('showAllAssets') === true ? assets : activeAssetsList }}/>}
+        { wasAlreadyHere &&  <AppContainer data={{'assetdata': localStorage.getItem('showAllAssets') === true ? assets : activeAssetsList }} /> }
         { !weGot200 && !wasAlreadyHere ? <SignInFirst getFormData={(e)=>this.getGettingStartedData(e)} letsGetStarted={()=>this.letsGetStarted()}/>:''}
       </div>
   )}

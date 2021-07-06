@@ -4,8 +4,10 @@ import GpsFixedIcon from '@material-ui/icons/GpsFixed';
 import Tablet from './tablet/tablet';
 import PhonelinkEraseIcon from '@material-ui/icons/PhonelinkErase';
 import GpsOffIcon from '@material-ui/icons/GpsOff';
+import SatelliteOutlinedIcon from '@material-ui/icons/SatelliteOutlined';
 import GPS from './gps/gps';
 import Location from './location/location';
+import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import Accordion from '@material-ui/core/Accordion';
 import TabletAndroidIcon from '@material-ui/icons/TabletAndroid';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -57,24 +59,36 @@ export default class Mani extends Component {
 			            <div className='column'>
 			              { 
 			              	gps === null ? 
-			              	<Tooltip title='This has NO GPSID' arrow> 
-			              		<PhonelinkEraseIcon />
+			              	<Tooltip title='Has NO GPSID' arrow> 
+			              		<PhonelinkEraseIcon style={{ color: "red" }}/>
 			              	</Tooltip>
 			              			 : 
-			              	<Tooltip title='Has GPSID' arrow>
-			              			<TabletAndroidIcon />
+			              	<Tooltip title='Tablet manifest' arrow>
+			              			<TabletAndroidIcon style={{ color: "#29d28b" }} />
 			              	</Tooltip>
 			              }
 			            </div>
 			            <div className='column'>
 			              {
 			              	gps === null ? 
-							<Tooltip title='This has NO GPSID' arrow>
-			              		<GpsOffIcon/>
+							<Tooltip title='Has NO GPSID' arrow>
+			              		<SatelliteOutlinedIcon style={{ color: "red" }}/>
 			              	</Tooltip>
 			              	 : 
-			              	<Tooltip title='Has GPSID' arrow>
-			              		<GpsFixedIcon/>
+			              	<Tooltip title='Gps unit data' arrow>
+			              		<SatelliteOutlinedIcon style={{ color: "#29d28b" }}/>
+			              	</Tooltip>
+			             }
+			            </div>
+			            <div className='column'>
+			              {
+			              	gps === null ? 
+							<Tooltip title='Has NO GPSID' arrow>
+			              		<RoomOutlinedIcon style={{ color: "red" }}/>
+			              	</Tooltip>
+			              	 : 
+			              	<Tooltip title='Location data' arrow>
+			              		<RoomOutlinedIcon style={{ color: "#29d28b" }}/>
 			              	</Tooltip>
 			             }
 			             
@@ -90,7 +104,7 @@ export default class Mani extends Component {
 			            <div className='column left-helper'>
 			              <GPS data={{'id':id,'gpsid':gps,'account': account, 'hashed': hashed}}/>
 			            </div>
-			            <div className='column helper'>			            
+			            <div className='column left-helper'>			            
 			              <Location data={{'id':id,'gpsid':gps,'account': account, 'hashed': hashed}}/>
 			            </div>
 			          </AccordionDetails>

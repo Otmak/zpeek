@@ -4,6 +4,7 @@ import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 
 export default class GPS extends Component {
@@ -79,25 +80,22 @@ export default class GPS extends Component {
 		const {gpsData, isGPSLoading, isParamEmpty} = this.state
   		const gpsList =  [
 	  		{
-	  			'name':'Asset DB ID',
+	  			'name':'ASSET DBID',
 				'id':'assetdbid'
 			}, {
-				'name':'Firmware',
+				'name':'FIRMWARE',
 				'id':'firmware'
-			}, {
-				'name':'Gps DB ID',
-				'id':'gpsdbid'
-	  		},{
-	  			'name': 'Last Phone Home',
+			},{
+	  			'name': 'LAST PHONE HOME',
 	  			'id': 'lastcallhome'
 	  		},{
-	  			'name': 'Last Inspection Date',
+	  			'name': 'LAST INSP DATE',
 	  			'id': 'lastinspectiondate'
 	  		},{
-	  			'name': 'Last Position Date',
+	  			'name': 'LAST POSITION DATE',
 	  			'id': 'lastpositiondate'
 	  		},{
-	  			'name': 'Sim Card Number',
+	  			'name': 'SIM CARD',
 	  			'id': 'scid'
 	  		}
   		]
@@ -108,7 +106,14 @@ export default class GPS extends Component {
   			// console.log('No gps data')
   			return(
   				<div>
-  					{ isGPSLoading && <span> Loading.... </span> }
+  					{ isGPSLoading &&
+  						<div>
+							<Skeleton style={{ height:80 }}/>
+							<Skeleton style={{ height:30 }}/>
+							<Skeleton style={{ height:30 }}/>
+							<Skeleton />
+  						</div> 
+  					}
 	  				{ !isGPSLoading && isParamEmpty &&
 	  					<div>
 		  					<Typography align='center'>No gps data </Typography>
@@ -163,7 +168,7 @@ export default class GPS extends Component {
 
   render(){
   	const {gpsData, isGPSLoading, isComponentMounted} = this.state
-  	console.log('GPS :- ', this)
+  	console.log('GPS :', this)
   	// console.log(`GPS:${gpsData}, is GPs loading?${gpsLoading}, is comp mounted?${isComponentMounted}`)
 
 	return (

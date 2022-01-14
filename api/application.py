@@ -1,3 +1,5 @@
+# 
+
 from flask import Flask, render_template, jsonify, send_file, url_for, redirect, request
 import xml.etree.ElementTree as ET
 import requests
@@ -95,13 +97,13 @@ def main():
                     errData = str(req.content)
                     print('Auth Failed for MANI')
                     return {'error': f'Authentication Failed==>{errData}'}
-            except AssertionError as error:
-                print('Error before reques', error)
+            except :
+                #print('Error before reques', error)
                 return {'error': 'Something went wrong while making you request'}
         else:
             print('No POST method')
-    except AssertionError as error:
-        print('Error occured in MAIN.', error)
+    except:
+        print('Error occured in MAIN.') 
         return {'error': 'Error making request for Mani'}
 
 
@@ -151,7 +153,7 @@ def location():
                 return {'error': 'Got a NON 200 response'}
         else:
             print('Not post method')
-    except AssertionError as error:
+    except :
         print('Error in Main', )
         return {'error': f'Error in MAIN '}
 
@@ -195,14 +197,14 @@ def gpsunit():
                     return {'gpsdata': myList}
                 else:
                     print('Error making request, probably not 200')
-            except AssertionError as error:
-                print('Error before or while making request', error)
+            except :
+               # print('Error before or while making request', error)
                 return {'error': 'error after making request'}
         else:
             print('Not post method')
 
 
-    except AssertionError as error:
+    except:
         print('Error in MAin GPSUnits')
         return {'error': 'Making your initial request'}
 
@@ -266,7 +268,7 @@ def path():
             print('Not POST method')
             return {'error': 'POST method only Allowed.'}
 
-    except AssertionError as error:
+    except :
         # print(error)
         print('ERROR')
         return {'error ': 'An Error in path happened'}

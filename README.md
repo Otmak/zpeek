@@ -1,6 +1,7 @@
 # What is Zpeek ?
 Zpeek (Zpeekv2) is the Second and improved version of [Zonar_peek](https://github.com/Otmak/zonar_peek)
-Zpeekv2 brings a fresh new look to the API application  it utilizes a Flask backend and React Front end. That's just about it, the code is still as messy version 1
+Zpeekv2 brings a fresh new look to the API application  it utilizes a Flask backend and React Front end. That's just about it, the code is still as messy 
+-_-. An attempt to clean up the code on [v3](https://github.com/Otmak/gtc_wanna_b)
 .....
 
 ## Available Scripts
